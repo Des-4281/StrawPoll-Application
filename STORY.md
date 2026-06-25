@@ -378,3 +378,59 @@ NEXT_STEPS.md: marked FEC key as done, added --check-status usage note,
 > *Run `python update_docs.py` to expand this into a narrative entry.*
 
 ---
+
+### [90e6f83] 2026-06-25 03:23 — Fix candidate seed bugs, add needs_update flag, format GOAL.md
+**Files:** ARCHITECTURE.md,GOAL.md,NEXT_STEPS.md,STORY.md,models.py,seed_candidates.py,
+
+Fix candidate seed bugs, add needs_update flag, format GOAL.md
+
+seed_candidates.py — two bug fixes:
+  1. Website URL scheme bug: FEC stores URLs without "http://" (e.g. "HICKENLOOPER.COM").
+     The check `if website.startswith("http")` silently discarded every URL from FEC.
+     Fixed by prepending "https://" when no scheme is present.
+  2. FEC candidate_inactive flag removed from withdrawal logic. Despite its name,
+     the flag is an administrative field that's incorrectly True for many actively-running
+     candidates including sitting senators (Tuberville, Daines, Tillis, Tina Smith).
+     Withdrawal detection now relies only on website keyword scanning.
+  - Added needs_update boolean set to True when no positions were extracted,
+    False when at least one position category was found. Cleared automatically on re-seed.
+  - Docstring on check_candidate_status() updated to reflect these changes.
+
+models.py — added needs_update: Mapped[bool] field to Candidate table.
+
+DB migration: reset 10 wrongly-flagged "withdrawn" candidates back to "declared".
+  Added needs_update column via ALTER TABLE, flagged 242 candidates with no positions.
+
+ARCHITECTURE.md:
+  - Added needs_update column to schema table
+  - Corrected race_status determination docs (removed FEC inactive flag reference)
+  - Added "33 states have 2026 Senate races" note with full state list
+  - Added note about manually updating primary_winner/primary_loser after primaries
+
+STORY.md — added Step 11: documents both bugs found during the first full seed run,
+  explains why the FEC inactive flag is unreliable, and why needs_update was added.
+
+NEXT_STEPS.md — added manual SQL snippet for updating primary nominees after each
+  state's primary. Listed all 33 states with 2026 Senate races.
+
+GOAL.md — reformatted for readability (content unchanged).
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---
+
+### [d659e83] 2026-06-25 03:30 — Fix FEC URL casing bug and add --refresh reminder to NEXT_STEPS
+**Files:** NEXT_STEPS.md,seed_candidates.py,
+
+Fix FEC URL casing bug and add --refresh reminder to NEXT_STEPS
+
+seed_candidates.py: lowercase URL before prepending https:// so FEC entries
+like "HTTPS://WWW.SITE.COM" don't become "https://HTTPS://..." — also
+normalizes all-caps domains like "HICKENLOOPER.COM" to lowercase
+
+NEXT_STEPS.md: added step 3 — run --refresh once to pick up the URL
+casing fix for candidates that got a bad URL on the first pass
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---

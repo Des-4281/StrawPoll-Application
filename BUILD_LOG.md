@@ -99,3 +99,133 @@ Simplify post-commit hook — remove interactive Claude prompt, add commit workf
 
 Update BUILD_LOG and STORY with recent documentation system changes
 ---
+
+## [e68b032] 2026-06-25 02:55 — David Solorio
+**Hash:** e68b0325d27a9f03e6496ca2ac94856b904a106c
+**Files:** .env.example,ARCHITECTURE.md,BUILD_LOG.md,NEXT_STEPS.md,STORY.md,models.py,seed_candidates.py,
+**Lines:** +590 / -2
+
+Add 2026 Senate candidate tracking — FEC data + Claude position extraction
+
+New table: candidates
+- Stores every 2026 Senate candidate who has raised funds (309 D/R from FEC)
+- Tracks name, state, party, incumbency, website URL, stated positions
+- Links incumbents to their voting record via bioguide_id FK to politicians table
+
+New script: seed_candidates.py
+- Pulls candidate list from FEC API (official federal source, free JSON API)
+- Fetches campaign website URL from FEC committee records
+- Downloads each campaign website, strips HTML, sends to Claude Sonnet 4.6
+- Claude extracts stated positions and maps to our 22 issue categories
+- Saves neutral factual descriptions ("Supports X", "Opposes Y") — no spin
+- Handles FEC rate limits with configurable delay (DEMO_KEY vs real key)
+- Name formatter handles FEC "LAST, FIRST MIDDLE" format including initial-first quirk
+
+Why FEC not Ballotpedia: Ballotpedia blocks all API and HTTP access (returns
+202 empty). FEC is the official government source — free, structured, complete.
+
+Requires free FEC API key from api.data.gov/signup — add as FEC_API_KEY in .env.
+Without it DEMO_KEY works but is limited to 60 req/hour (too slow for full run).
+
+Usage:
+  python seed_candidates.py --dry-run      # preview
+  python seed_candidates.py --state GA     # one state
+  python seed_candidates.py                # all funded D/R candidates
+
+Updated: ARCHITECTURE.md (candidates schema, new data source, setup step),
+NEXT_STEPS.md (FEC key instructions), STORY.md (narrative for this step),
+.env.example (FEC_API_KEY placeholder)
+---
+
+## [edfcf20] 2026-06-25 03:12 — David Solorio
+**Hash:** edfcf20e2dae2404006e1b3e0905535b40b1823d
+**Files:** ARCHITECTURE.md,NEXT_STEPS.md,STORY.md,models.py,seed_candidates.py,
+**Lines:** +260 / -50
+
+Add race status tracking and --check-status mode for 2026 Senate candidates
+
+models.py — three new columns on the candidates table:
+  - race_status: "declared", "suspended", "withdrawn", "primary_winner", "primary_loser"
+  - race_status_updated_at: timestamp of last status check
+  - fec_candidate_id: FEC's unique ID (e.g. "S8GA00180") stored for re-querying
+
+seed_candidates.py:
+  - Save block now stores fec_candidate_id and sets initial race_status from
+    FEC's candidate_inactive flag (withdrawn if inactive, declared otherwise)
+  - Website fetch checks for withdrawal/suspension language before extracting
+    positions — skips position extraction for withdrawn candidates
+  - New check_candidate_status() async function: re-checks FEC inactive flag
+    and website keywords for every declared candidate, updates race_status
+  - New _check_website_for_withdrawal() helper: keyword scan for phrases like
+    "suspending my campaign", "dropped out", "no longer a candidate" — no AI
+    needed, fast, free to run weekly
+  - New --check-status CLI flag: runs status check mode instead of seed mode
+  - --check-status --state GA: check one state only
+
+DB migration: added three columns to existing candidates table via
+  ALTER TABLE ADD COLUMN (SQLite supports this with default values)
+
+ARCHITECTURE.md: updated candidates schema table with all new columns,
+  added race_status values documentation, added Step 3 for seed_candidates,
+  updated Phase 1 roadmap to mark candidate tracking complete
+
+STORY.md: added Step 10 explaining the race status design, why keyword
+  matching is used instead of Claude (cost), and how the two signals work
+
+NEXT_STEPS.md: marked FEC key as done, added --check-status usage note,
+  renumbered action items
+---
+
+## [90e6f83] 2026-06-25 03:23 — David Solorio
+**Hash:** 90e6f838691ca62fc73b0552eddee0e1882b373c
+**Files:** ARCHITECTURE.md,GOAL.md,NEXT_STEPS.md,STORY.md,models.py,seed_candidates.py,
+**Lines:** +180 / -42
+
+Fix candidate seed bugs, add needs_update flag, format GOAL.md
+
+seed_candidates.py — two bug fixes:
+  1. Website URL scheme bug: FEC stores URLs without "http://" (e.g. "HICKENLOOPER.COM").
+     The check `if website.startswith("http")` silently discarded every URL from FEC.
+     Fixed by prepending "https://" when no scheme is present.
+  2. FEC candidate_inactive flag removed from withdrawal logic. Despite its name,
+     the flag is an administrative field that's incorrectly True for many actively-running
+     candidates including sitting senators (Tuberville, Daines, Tillis, Tina Smith).
+     Withdrawal detection now relies only on website keyword scanning.
+  - Added needs_update boolean set to True when no positions were extracted,
+    False when at least one position category was found. Cleared automatically on re-seed.
+  - Docstring on check_candidate_status() updated to reflect these changes.
+
+models.py — added needs_update: Mapped[bool] field to Candidate table.
+
+DB migration: reset 10 wrongly-flagged "withdrawn" candidates back to "declared".
+  Added needs_update column via ALTER TABLE, flagged 242 candidates with no positions.
+
+ARCHITECTURE.md:
+  - Added needs_update column to schema table
+  - Corrected race_status determination docs (removed FEC inactive flag reference)
+  - Added "33 states have 2026 Senate races" note with full state list
+  - Added note about manually updating primary_winner/primary_loser after primaries
+
+STORY.md — added Step 11: documents both bugs found during the first full seed run,
+  explains why the FEC inactive flag is unreliable, and why needs_update was added.
+
+NEXT_STEPS.md — added manual SQL snippet for updating primary nominees after each
+  state's primary. Listed all 33 states with 2026 Senate races.
+
+GOAL.md — reformatted for readability (content unchanged).
+---
+
+## [d659e83] 2026-06-25 03:30 — David Solorio
+**Hash:** d659e8377778a9876107177aa82016bfe2538191
+**Files:** NEXT_STEPS.md,seed_candidates.py,
+**Lines:** +10 / -2
+
+Fix FEC URL casing bug and add --refresh reminder to NEXT_STEPS
+
+seed_candidates.py: lowercase URL before prepending https:// so FEC entries
+like "HTTPS://WWW.SITE.COM" don't become "https://HTTPS://..." — also
+normalizes all-caps domains like "HICKENLOOPER.COM" to lowercase
+
+NEXT_STEPS.md: added step 3 — run --refresh once to pick up the URL
+casing fix for candidates that got a bad URL on the first pass
+---

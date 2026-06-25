@@ -1,0 +1,1412 @@
+INFO candidates table ready
+INFO Fetching 2026 Senate candidates from FEC...
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidates/?election_year=2026&office=S&has_raised_funds=true&per_page=100&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM&sort=name&party=DEM&party=REP&page=1 "HTTP/1.1 200 OK"
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidates/?election_year=2026&office=S&has_raised_funds=true&per_page=100&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM&sort=name&party=DEM&party=REP&page=2 "HTTP/1.1 200 OK"
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidates/?election_year=2026&office=S&has_raised_funds=true&per_page=100&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM&sort=name&party=DEM&party=REP&page=3 "HTTP/1.1 200 OK"
+INFO Found 273 candidates to process
+INFO [1/273] MS — Sarah Adlakha (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MS00109/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://SARAHADLAKHAFORSENATE.COM
+INFO HTTP Request: GET https://sarahadlakhaforsenate.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [2/273] LA — Nicholas Albares (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00706/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://NICKFORLOUISIANA.COM
+INFO HTTP Request: GET https://nickforlouisiana.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.nickforlouisiana.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [3/273] TX — Keith Allen (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00305/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://KEITHALLEN4CONGRESS.COM
+INFO HTTP Request: GET https://keithallen4congress.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [4/273] TX — Colin Allred (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4TX00722/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://COLINALLRED.COM
+INFO HTTP Request: GET https://colinallred.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [5/273] MT — Kurt Alme (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MT00295/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://ALMEFORSENATE.COM
+INFO HTTP Request: GET https://almeforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 4 categories
+INFO [6/273] SC — Annie Andrews (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04239/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DRANNIEANDREWS.COM
+INFO HTTP Request: GET https://www.drannieandrews.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://drannieandrews.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO [7/273] IA — Ashley Arenholz (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IA00314/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [8/273] AR — Micah Ashby (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AR00207/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ASHBYFORUSSENATE.COM
+INFO HTTP Request: GET https://www.ashbyforussenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 8 categories
+INFO [9/273] FL — Joey Atkins (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00749/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JOEYFORFLORIDA.COM
+INFO HTTP Request: GET https://www.joeyforflorida.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 4 categories
+INFO [10/273] CO — Mark Baisley (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6CO00507/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.MARKBAISLEY.COM
+INFO HTTP Request: GET https://www.markbaisley.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://baisleyforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 2 categories
+INFO [11/273] MT — Alani Bankhead (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MT00253/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ALANIFORMT.COM
+INFO HTTP Request: GET https://www.alaniformt.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://alaniformt.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [12/273] KY — Garland Barr (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00286/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://BARRFORSENATE.COM
+INFO HTTP Request: GET https://barrforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 9 categories
+INFO [13/273] SC — Andre Bauer (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04262/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [14/273] DE — Christopher Beardsley (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6DE00156/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [15/273] SD — Julian Beaudion (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SD01125/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.JULIANFORSD.COM
+INFO   Website unreachable
+INFO [16/273] MA — Nathan Bech (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MA00270/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.NATHANBECH.COM
+INFO HTTP Request: GET https://www.nathanbech.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 1 categories
+INFO [17/273] IL — Douglas Bennett (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00391/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [18/273] TX — Virgil Bierschwale (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0TX00365/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.BIERSCHWALEFORUSSENATE.COM
+INFO   Website unreachable
+INFO [19/273] MT — Michael Blackwolf (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MT00246/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://BLACKWOLFFORSENATE.COM
+INFO HTTP Request: GET https://blackwolfforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://blackwolfformontana.com/ "HTTP/1.1 429 Too Many Requests"
+INFO   Website unreachable
+INFO [20/273] KY — Charles Booker (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00385/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://CHARLESBOOKER.ORG
+INFO HTTP Request: GET https://charlesbooker.org "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [21/273] NJ — Cory Booker (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4NJ00185/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.CORYBOOKER.COM
+INFO HTTP Request: GET https://www.corybooker.com "HTTP/1.1 302 Found"
+INFO HTTP Request: GET https://corybooker.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 1 categories
+INFO   Linked to voting record: B001288
+INFO [22/273] IL — Steve Botsford (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00656/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [23/273] GA — Reagan Box (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6GA00267/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.REAGANBOXFORCONGRESS.COM
+INFO HTTP Request: GET https://www.reaganboxforcongress.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [24/273] TN — Marquita Bradshaw (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4TN00542/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.MARQUITABRADSHAW.COM
+INFO HTTP Request: GET https://www.marquitabradshaw.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [25/273] CO — Karen Breslin (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6CO00408/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.BRESLINFORCOLORADO.COM
+INFO HTTP Request: GET https://www.breslinforcolorado.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 2 categories
+INFO [26/273] SC — Brandon Brown (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04270/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [27/273] NC — Don Brown (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NC00373/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.BROWNFORNC.COM
+INFO HTTP Request: GET https://www.brownfornc.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://donbrownfornc.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.donbrownfornc.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [28/273] NH — Scott Brown (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NH00166/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://SCOTTBROWN.COM
+INFO HTTP Request: GET https://scottbrown.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [29/273] OH — Sherrod Brown (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OH00163/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.SHERRODBROWN.COM
+INFO HTTP Request: GET https://www.sherrodbrown.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO [30/273] SC — Catherine Bruce (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2SC00145/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [31/273] RI — Connor Burbridge (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6RI00270/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.BURBRIDGEFORRI.COM
+INFO   Website unreachable
+INFO [32/273] AL — Matthew Burton (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AL00500/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.SETHBURTONFORSENATE.COM
+INFO HTTP Request: GET https://www.sethburtonforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [33/273] IL — Awisi Bustos (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00565/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [34/273] WY — James Byrd (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6WY00217/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [35/273] ME — Carmem Calabrese (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ME00316/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://CARMEN4SENATE.COM
+INFO HTTP Request: GET https://carmen4senate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [36/273] ME — Carmen Calabrese (Republican Party)
+INFO   Website: not found
+INFO [37/273] MT — Lee Calhoun (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MT00329/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://CALHOUNFORMT.COM
+INFO HTTP Request: GET https://calhounformt.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO [38/273] KY — Daniel Cameron (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00237/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://CAMERONFORKENTUCKY.COM
+INFO HTTP Request: GET https://cameronforkentucky.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 9 categories
+INFO [39/273] TX — Sara Canady (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00545/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://SARAFORSENATE.ORG
+INFO HTTP Request: GET https://saraforsenate.org "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.saraforsenate.org/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [40/273] WV — Shelley Capito (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4WV00159/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.CAPITOLFORSENATE.COM
+INFO   Website unreachable
+INFO   Linked to voting record: C001047
+INFO [41/273] IL — Cary Capparelli (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00490/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.RCARYCAPPARELLI.NET
+INFO HTTP Request: GET https://www.rcarycapparelli.net "HTTP/1.1 404 Not Found"
+INFO   Website unreachable
+INFO [42/273] IA — James Carlin (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IA00249/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://CARLINFORUSSENATE.COM
+INFO HTTP Request: GET https://carlinforussenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 2 categories
+INFO [43/273] GA — Earl Carter (Republican Party)
+INFO   Website: not found
+INFO [44/273] LA — William Cassidy (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4LA00107/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.BILLCASSIDY.COM
+INFO HTTP Request: GET https://www.billcassidy.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO   Linked to voting record: C001075
+INFO [45/273] IL — Casimer Chlebek (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00466/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.CASEYFORSENATE.COM
+INFO HTTP Request: GET https://www.caseyforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://caseyforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 10 categories
+INFO [46/273] GA — Michael Collins (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6GA00390/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://MIKECOLLINSGA.COM
+INFO   Website unreachable
+INFO [47/273] ME — Susan Collins (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ME00159/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.SUSANCOLLINS.COM
+INFO HTTP Request: GET https://www.susancollins.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://susancollins.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 1 categories
+INFO   Linked to voting record: C001035
+INFO [48/273] MS — Scott Colom (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MS00133/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://SCOTTCOLOM.COM
+INFO   Website unreachable
+INFO [49/273] NC — Robert Colon (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2NC00745/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.ROBERTCOLONFORSENATE.COM
+INFO   Website unreachable
+INFO [50/273] DE — Christopher Coons (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0DE00092/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.CHRISCOONS.COM
+INFO   Website unreachable
+INFO   Linked to voting record: C001088
+INFO [51/273] NC — Roy Cooper (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NC00407/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ROYCOOPER.COM
+INFO HTTP Request: GET https://www.roycooper.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://roycooper.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 1 categories
+INFO [52/273] TX — John Cornyn (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2TX00106/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO   Linked to voting record: C001056
+INFO [53/273] ME — David Costello (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4ME00113/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://COSTELLOFORSENATE.COM
+INFO HTTP Request: GET https://costelloforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.costelloforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 8 categories
+INFO [54/273] AR — Thomas Cotton (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4AR00103/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.TOMCOTTON.COM
+INFO HTTP Request: GET https://www.tomcotton.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 6 categories
+INFO   Linked to voting record: C001095
+INFO [55/273] SC — Calvin Cowen (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04379/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [56/273] GA — John Coyne (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4GA11202/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.JOHNCOYNEFORUSSENATE.COM
+INFO   Website unreachable
+INFO [57/273] MN — Angie Craig (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MN00499/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ANGIECRAIG.COM
+INFO HTTP Request: GET https://www.angiecraig.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://angiecraig.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [58/273] LA — Gary Crockett (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00680/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.CROCKETTFORLOUISIANA.COM
+INFO HTTP Request: GET https://www.crockettforlouisiana.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [59/273] TX — Jasmine Crockett (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00552/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JASMINEFORUS.COM
+INFO HTTP Request: GET https://jasmineforus.com "HTTP/1.1 308 Permanent Redirect"
+INFO HTTP Request: GET https://www.jasmineforus.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO [60/273] MT — Steve Daines (Republican Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2MT00096/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO   Linked to voting record: D000618
+INFO [61/273] VA — Lorita Daniels (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6VA00184/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.LORITADANIELS.COM
+INFO HTTP Request: GET https://www.loritadaniels.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://loritadaniels.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [62/273] NC — Richard Dansie (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NC00472/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.DANSIEFORSENATE.US
+INFO   Website unreachable
+INFO [63/273] SC — Paul Dans (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04296/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://PAULDANS.COM
+INFO   Website unreachable
+INFO [64/273] KS — Christy Davis (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KS00247/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [65/273] LA — Jamie Davis (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00615/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JAMIEFORLOUISIANA.COM
+INFO HTTP Request: GET https://jamieforlouisiana.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 7 categories
+INFO [66/273] IL — Jonathan Dean (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00623/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://DEAN4IL.COM
+INFO HTTP Request: GET https://dean4il.com "HTTP/1.1 308 Permanent Redirect"
+INFO HTTP Request: GET https://www.dean4il.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO [67/273] MA — John Deaton (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MA00304/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://JOHNDEATONFORSENATE.CO
+INFO   Website unreachable
+INFO [68/273] IL — Adam Delgado (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00607/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://ADAMDELGADOFORUSSENATE.COM
+INFO HTTP Request: GET https://adamdelgadoforussenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [69/273] VA — Alex De Paula (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6VA00226/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ALEXFORVIRGINIA.COM
+INFO HTTP Request: GET https://www.alexforvirginia.com "HTTP/1.1 404 Not Found"
+INFO   Website unreachable
+INFO [70/273] SC — Thomas Dismukes (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04361/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://THOMASDISMUKES.COM
+INFO HTTP Request: GET https://thomasdismukes.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [71/273] NM — Matt Dodson (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NM01145/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://MATTDODSONFORNM.COM
+INFO HTTP Request: GET https://mattdodsonfornm.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [72/273] GA — Derek Dooley (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6GA00408/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DOOLEYFORGEORGIA.COM
+INFO HTTP Request: GET https://www.dooleyforgeorgia.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [73/273] AR — Ethan Dunbar (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AR00173/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [74/273] IL — Richard Durbin (Democratic Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00151/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DICKDURBIN.COM
+INFO HTTP Request: GET https://www.dickdurbin.com "HTTP/1.1 200 OK"
+INFO   Website unreachable
+INFO   Linked to voting record: D000563
+INFO [75/273] VA — Gregory Eichelberger (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6VA00192/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [76/273] MI — Abdul El-Sayed (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MI00418/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://ABDULFORSENATE.COM
+INFO HTTP Request: GET https://abdulforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO [77/273] LA — Julie Emerson (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00581/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JULIEEMERSON.ORG
+INFO   Website unreachable
+INFO [78/273] OK — Gary England (Republican Party)
+INFO   Website: not found
+INFO [79/273] IA — Joni Ernst (Republican Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4IA00129/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO   Linked to voting record: E000295
+INFO [80/273] IL — Jeannie Evans (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00672/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.JEANNIEEVANS.COM
+INFO   Website unreachable
+INFO [81/273] ID — Joe Evans (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ID00120/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [82/273] WV — Jonathan Evans (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6WV00147/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [83/273] VA — Kim Farington (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6VA00143/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://KIMFORVIRGINIA.COM
+INFO   Website unreachable
+INFO [84/273] KY — Michael Faris (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00260/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.FARISFORSENATE.COM
+INFO HTTP Request: GET https://www.farisforsenate.com "HTTP/1.1 401 Unauthorized"
+INFO   Website unreachable
+INFO [85/273] KY — Michael Faris (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00278/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.FARISFORSENATE.COM
+INFO HTTP Request: GET https://www.farisforsenate.com "HTTP/1.1 401 Unauthorized"
+INFO   Website unreachable
+INFO [86/273] ME — Tucker Favreau (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ME00357/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://TUCKERFORCONGRESS.COM
+INFO HTTP Request: GET https://tuckerforcongress.com "HTTP/1.1 404 Not Found"
+INFO   Website unreachable
+INFO [87/273] WV — Rachel Fetty Anderson (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6WV00188/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [88/273] LA — John Fleming (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00318/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.FLEMINGSENATECAMPAIGN.COM
+INFO HTTP Request: GET https://www.flemingsenatecampaign.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://flemingsenatecampaign.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 7 categories
+INFO [89/273] NE — William Forbes (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NE00160/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [90/273] KY — Logan Forsythe (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00328/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://LOGANFORSYTHE.COM
+INFO HTTP Request: GET https://loganforsythe.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 4 categories
+INFO [91/273] SC — Kyle Freeman (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04197/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.KYLEFREEMANFORSENATE.COM
+INFO HTTP Request: GET https://www.kylefreemanforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://kylefreemanforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [92/273] WV — Alexander Gaaserud (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6WV00154/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [93/273] FL — Christopher Gleason (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00848/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://VOTEFORGLEASON.COM
+INFO HTTP Request: GET https://voteforgleason.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO [94/273] CO — Julie Gonzales (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6CO00499/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JULIEFORCOLORADO.COM
+INFO HTTP Request: GET https://julieforcolorado.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.julieforcolorado.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 8 categories
+INFO [95/273] IL — John Goodman (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00425/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.GOODMANFORILLINOIS.COM
+INFO HTTP Request: GET https://www.goodmanforillinois.com "HTTP/1.1 409 Conflict"
+INFO   Website unreachable
+INFO [96/273] SC — Lindsey Graham (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0SC00149/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO   Linked to voting record: G000359
+INFO [97/273] FL — Alan Grayson (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2FL00581/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.GRAYSONFORCONGRESS.COM
+INFO HTTP Request: GET https://www.graysonforcongress.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [98/273] OK — Troy Green (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04171/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.TROYGREENFORSENATE.COM
+INFO HTTP Request: GET https://www.troygreenforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [99/273] WY — Harriet Hageman (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6WY00209/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.HAGEMANFORWYOMING.COM
+INFO HTTP Request: GET https://www.hagemanforwyoming.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [100/273] TN — Bill Hagerty (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0TN00169/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.TEAMHAGERTY.COM
+INFO HTTP Request: GET https://www.teamhagerty.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO   Linked to voting record: H000601
+INFO [101/273] OK — Nicky Hankins (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04213/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.OKSAYSNO.COM
+INFO   Website unreachable
+INFO [102/273] OK — Nicky Hankins (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04239/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.OKSAYSNO.COM
+INFO   Website unreachable
+INFO [103/273] MN — David Hann (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MN00531/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.HANNFORSENATE.COM
+INFO HTTP Request: GET https://www.hannforsenate.com "HTTP/1.1 404 Not Found"
+INFO   Website unreachable
+INFO [104/273] KS — Jason Hart (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KS00304/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HARTFORSENATE.COM
+INFO HTTP Request: GET https://hartforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [105/273] CO — Brashad Hasley (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6CO00473/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.BRASHADFORCOLORADO.COM
+INFO   Website unreachable
+INFO [106/273] TX — Ahmad Hassan (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4TX00821/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HASSANFORTEXAS.COM
+INFO HTTP Request: GET https://hassanfortexas.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [107/273] OK — Kevin Hern (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04247/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.HERNFORSENATE.COM
+INFO HTTP Request: GET https://www.hernforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET http://hernforsenate.com/ "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://hernforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 9 categories
+INFO [108/273] SC — Patrick Herrmann (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04346/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://VOTEPAT.US
+INFO HTTP Request: GET https://votepat.us "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.votepat.us/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 4 categories
+INFO [109/273] MI — Frederick Heurtebise (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MI00384/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [110/273] CO — John Hickenlooper (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0CO00575/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HICKENLOOPER.COM
+INFO HTTP Request: GET https://hickenlooper.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO   Linked to voting record: H000273
+INFO [111/273] LA — Christopher Holder (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00490/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.CHRISHOLDER4SENATE.COM
+INFO   Website unreachable
+INFO [112/273] SC — Ethan Holliman (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04189/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [113/273] MI — Rachel Howard (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MI00467/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [114/273] AL — Jared Hudson (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AL00443/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [115/273] MT — Michael Hummert (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4MT00217/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://MIKEFORMT.COM; MIKEFORMONTANA.COM
+INFO   Website unreachable
+INFO [116/273] TX — Wesley Hunt (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00511/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WESLEYFORTEXAS.COM
+INFO HTTP Request: GET https://wesleyfortexas.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 12 categories
+INFO [117/273] OH — Jon Husted (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OH00304/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JONHUSTED.COM
+INFO HTTP Request: GET https://www.jonhusted.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.jonhustedforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO   Linked to voting record: H001104
+INFO [118/273] MS — Cindy Hyde-Smith (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S8MS00261/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.CINDYHYDESMITH.COM
+INFO HTTP Request: GET https://www.cindyhydesmith.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO   Linked to voting record: H001079
+INFO [119/273] OK — James Inhofe (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4OK00083/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JIMINHOFE.COM
+INFO   Website unreachable
+INFO [120/273] NH — Dan Innis (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NH00174/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.VOTEDANINNIS.COM
+INFO HTTP Request: GET https://www.votedaninnis.com "HTTP/1.1 404 Not Found"
+INFO   Website unreachable
+INFO [121/273] SC — Lee Johnson (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04288/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://LEEJOHNSONFORSC.COM
+INFO HTTP Request: GET https://leejohnsonforsc.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [122/273] NC — Thomas Johnson (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NC00480/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://TLJ2026.COM
+INFO HTTP Request: GET https://tlj2026.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.tlj2026.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [123/273] CO — Dathan Jones (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6CO00481/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://DATHANCJONES4USSENATE.COM
+INFO HTTP Request: GET https://dathancjones4ussenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.dathancjones4ussenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 8 categories
+INFO [124/273] CO — Janak Joshi (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6CO00440/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [125/273] DE — Michael Katz (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6DE00206/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DRMIKEKATZ.COM
+INFO HTTP Request: GET https://www.drmikekatz.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 11 categories
+INFO [126/273] MT — Christopher Kehoe (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MT00303/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [127/273] IL — Robin Kelly (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00474/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://ROBINFORSENATE.COM
+INFO HTTP Request: GET https://robinforsenate.com "HTTP/1.1 308 Permanent Redirect"
+INFO HTTP Request: GET https://www.robinforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [128/273] TX — Gulrez Khan (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00362/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [129/273] OH — Ronald Kincaid (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OH00361/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.KINCAIDFORSENATE.COM
+INFO   Website unreachable
+INFO [130/273] GA — John King (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6GA00382/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.VOTEJOHNKING.COM
+INFO HTTP Request: GET https://www.votejohnking.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [131/273] ME — Dan Kleban (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ME00381/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DANFORMAINE.COM
+INFO HTTP Request: GET https://www.danformaine.com "HTTP/1.1 200 OK"
+INFO   Website unreachable
+INFO [132/273] IL — S Krishnamoorthi (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00482/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.RAJAFORIL.COM
+INFO HTTP Request: GET https://www.rajaforil.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [133/273] ME — Andrea Laflamme (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ME00340/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://ANDREAFORMAINE.COM
+INFO HTTP Request: GET https://andreaformaine.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.andreaformaine.com/ "HTTP/1.1 200 OK"
+INFO   Status update from website: suspended
+INFO [134/273] FL — Jake Lang (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00657/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [135/273] AL — Dakarai Larriett (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AL00427/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DAKARAILARRIETT.COM
+INFO HTTP Request: GET https://www.dakarailarriett.com "HTTP/1.1 200 OK"
+INFO   Website unreachable
+INFO [136/273] ID — Denny Lave (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ID00161/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DENNYFORSENATE.COM
+INFO HTTP Request: GET https://www.dennyforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 2 categories
+INFO [137/273] NJ — Robert Lebovics (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NJ00438/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [138/273] LA — Julia Letlow (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00664/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [139/273] AR — Jeb Little (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AR00215/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JEBLITTLEFORSENATE.COM
+INFO   Website unreachable
+INFO [140/273] IL — Pamela Long (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00540/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.LONGFORSENATE2026.COM
+INFO HTTP Request: GET https://www.longforsenate2026.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [141/273] MN — Melisa Lopez Franzen (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MN00465/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.MELISAFORMINNESOTA.COM
+INFO   Website unreachable
+INFO [142/273] NM — Ben Lujan (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0NM00058/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.BENRLUJAN.COM
+INFO   Website unreachable
+INFO [143/273] WY — Cynthia Lummis (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0WY00137/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.LUMMISFORWYOMING.COM
+INFO HTTP Request: GET https://www.lummisforwyoming.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://lummisforwyoming.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO   Linked to voting record: L000571
+INFO [144/273] FL — Tamika Lyles (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00673/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [145/273] SC — Mark Lynch (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SC04213/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.LYNCHFORSENATE.COM
+INFO HTTP Request: GET https://www.lynchforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO [146/273] NH — Karishma Manzur (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NH00182/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://KARISHMAFORSENATE.COM
+INFO HTTP Request: GET https://karishmaforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.karishmaforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO [147/273] NM — Larry Marker (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NM01186/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://LARRYMARKER.COM
+INFO HTTP Request: GET https://larrymarker.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [148/273] CO — George Markert (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6CO00424/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [149/273] MA — Edward Markey (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4MA00028/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.EDMARKEY.COM
+INFO   Website unreachable
+INFO   Linked to voting record: M000133
+INFO [150/273] KS — Roger Marshall (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0KS00315/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://BRENDA@ELECTIONCFO.COM
+INFO HTTP Request: GET https://BRENDA@electioncfo.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO   Linked to voting record: M001198
+INFO [151/273] AL — Steven Marshall (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AL00450/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [152/273] IL — Bryan Maxwell (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00649/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [153/273] GA — Jonathan Mccolumn (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2GA00282/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JONATHANMCCOLUMN.COM
+INFO HTTP Request: GET https://jonathanmccolumn.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 9 categories
+INFO [154/273] KY — Mitch Mcconnell (Republican Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2KY00012/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.INDEFENSEOFFREESPEECH.COM
+INFO   Website unreachable
+INFO   Linked to voting record: M000355
+INFO [155/273] KY — Amy Mcgrath (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0KY00339/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.AMYMCGRATH.COM
+INFO HTTP Request: GET https://www.amymcgrath.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://amymcgrath.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 7 categories
+INFO [156/273] RI — Raymond Mckay (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4RI00051/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.MCKAYFORSENATE.COM
+INFO HTTP Request: GET https://www.mckayforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.mckayforussenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [157/273] WV — Bryan Mckinney (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4WV00365/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DEATHTOTAXES.COM
+INFO HTTP Request: GET https://www.deathtotaxes.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [158/273] MI — Mallory Mcmorrow (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MI00392/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.MCMORROWFORMICHIGAN.COM
+INFO   Website unreachable
+INFO [159/273] SD — Justin Mcneal (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6SD01133/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JUSTINMCNEAL.COM
+INFO   Website unreachable
+INFO [160/273] WV — Janet Mcnulty (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4WV00407/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [161/273] OR — Jeffrey Merkley (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S8OR00207/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JEFFMERKLEY.COM
+INFO HTTP Request: GET https://www.jeffmerkley.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO   Linked to voting record: M001176
+INFO [162/273] TN — Civil Miller-Watkins (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4TN00534/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.CIVIL4TN.COM
+INFO   Website unreachable
+INFO [163/273] ME — Janet Mills (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ME00407/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JANETMILLS.COM
+INFO HTTP Request: GET https://janetmills.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO [164/273] VA — Bert Mizusawa (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S8VA00321/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://BERTFORSENATE.COM
+INFO HTTP Request: GET https://bertforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [165/273] FL — Ashley Moody (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00640/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO   Linked to voting record: M001244
+INFO [166/273] AL — Felix Moore (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AL00476/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.BARRYMOOREFORCONGRESS.COM
+INFO HTTP Request: GET https://www.barrymooreforcongress.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://barrymooreforalabama.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 8 categories
+INFO [167/273] KY — Nate Morris (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00302/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.NATEMORRIS.COM
+INFO HTTP Request: GET https://www.natemorris.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET http://natemorris.com/ "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://natemorris.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 8 categories
+INFO [168/273] NC — Michele Morrow (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NC00522/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.MORROW4NC.COM
+INFO   Website unreachable
+INFO [169/273] NH — Chuck Morse (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2NH00249/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [170/273] MA — Seth Moulton (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MA00296/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.SETHMOULTON.COM
+INFO HTTP Request: GET https://www.sethmoulton.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://sethmoulton.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 7 categories
+INFO [171/273] FL — Hector Mujica (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00806/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://HECTORMUJICA.COM
+INFO   Website unreachable
+INFO [172/273] OK — Markwayne Mullin (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2OK00186/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.MULLINFORAMERICA.COM
+INFO HTTP Request: GET https://www.mullinforamerica.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://mullinforamerica.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO [173/273] NJ — Justin Murphy (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4NJ00532/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JERSEYJUSTIN4SENATE.ORG
+INFO HTTP Request: GET https://www.jerseyjustin4senate.org "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://jerseyjustin4senate.org/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 16 categories
+INFO [174/273] KS — Erik Murray (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KS00270/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://ERIKFORKANSAS.COM
+INFO   Website unreachable
+INFO [175/273] MT — Reilly Neill (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MT00238/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://REILLYFORMONTANA.COM
+INFO HTTP Request: GET https://reillyformontana.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.reillyformontana.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [176/273] NC — Wiley Nickel (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NC00340/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.WILEYNICKEL.COM
+INFO   Website unreachable
+INFO [177/273] FL — Angela Nixon (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00830/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://ANGIENIXON.COM
+INFO HTTP Request: GET https://angienixon.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+WARNING Position extraction failed for Angela Nixon: Extra data: line 13 column 1 (char 938)
+INFO   Positions found: 0 categories
+INFO [178/273] IA — Jackie Norris (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IA00280/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [179/273] OH — Frederick Ode (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OH00387/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.ODEFOROHIO.COM
+INFO   Website unreachable
+INFO [180/273] GA — Jonathan Ossoff (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S8GA00180/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://ELECTJON.COM
+INFO   Website unreachable
+INFO   Linked to voting record: O000174
+INFO [181/273] NH — Chris Pappas (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NH00141/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.CHRISPAPPAS.ORG
+INFO HTTP Request: GET https://www.chrispappas.org "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [182/273] KS — Lois Parelkar (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KS00239/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ANNEPARELKAR
+INFO   Website unreachable
+INFO [183/273] TX — Warren Paxton (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00388/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.KENPAXTON.COM
+INFO HTTP Request: GET https://www.kenpaxton.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [184/273] AK — Mary Peltola (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AK00276/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.MARYPELTOLA.COM
+INFO HTTP Request: GET https://www.marypeltola.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://marypeltola.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [185/273] OR — Jo Perkins (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4OR00156/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://PERKINSE.VOTE
+INFO   Website unreachable
+INFO [186/273] MN — Raymond Petersen (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4MN00551/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://RAYFORSENATE.COM
+INFO HTTP Request: GET https://rayforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.rayforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 1 categories
+INFO [187/273] MI — Gary Peters (Democratic Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4MI00355/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.PETERSFORMICHIGAN.COM
+INFO   Website unreachable
+INFO   Linked to voting record: P000595
+INFO [188/273] ME — Graham Platner (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ME00373/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.GRAHAMFORSENATE.COM
+INFO HTTP Request: GET https://www.grahamforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [189/273] OK — Jim Priest (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04197/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [190/273] OK — Brian Ragain (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04262/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://RAGAINFORSENATE.COM
+INFO HTTP Request: GET https://ragainforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO [191/273] WY — Reid Rasner (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4WY00162/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://REIDRASNER.COM
+INFO HTTP Request: GET https://reidrasner.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://rasnerforwy.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [192/273] RI — John Reed (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6RI00163/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JACKREED.COM
+INFO HTTP Request: GET https://www.jackreed.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://jackreed.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO   Linked to voting record: R000122
+INFO [193/273] VA — Bryce Reeves (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6VA00176/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.BRYCEREEVES.COM
+INFO HTTP Request: GET https://www.brycereeves.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://brycereeves.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO [194/273] NE — Pete Ricketts (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NE00129/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.PETERICKETTS.COM
+INFO HTTP Request: GET https://www.petericketts.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://petericketts.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 4 categories
+INFO   Linked to voting record: R000618
+INFO [195/273] MA — Alexander Rikleen (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MA00254/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://ALEXRIKLEEN.US
+INFO HTTP Request: GET https://alexrikleen.us "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.alexrikleen.us/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 4 categories
+INFO [196/273] ME — Daira Rodriguez (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ME00365/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [197/273] IL — Adair Rodriquez (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00631/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [198/273] MI — Michael Rogers (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4MI00595/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://ROGERSFORSENATE.COM
+INFO HTTP Request: GET https://rogersforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 5 categories
+INFO [199/273] KY — Dale Romans (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00369/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [200/273] ID — David Roth (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ID00138/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ROTHFORIDAHO.ORG
+INFO HTTP Request: GET https://www.rothforidaho.org "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [201/273] SD — Mike Rounds (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4SD00049/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ROUNDSFORSENATE.COM
+INFO HTTP Request: GET https://www.roundsforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://roundsforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 2 categories
+INFO   Linked to voting record: R000605
+INFO [202/273] ID — Joshua Roy (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6ID00153/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JOSHROYFORIDAHO.COM
+INFO HTTP Request: GET https://joshroyforidaho.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 14 categories
+INFO [203/273] MN — Mike Ruoho (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4MN00486/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.MIKERUOHO.COM
+INFO HTTP Request: GET https://www.mikeruoho.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://mikeruoho.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO [204/273] AR — James Russell (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AR00181/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.RUSSELLFORAR.COM
+INFO HTTP Request: GET https://www.russellforar.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://russellforar.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [205/273] IL — Kevin Ryan (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00581/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.RUNWITHKEV.COM
+INFO   Website unreachable
+INFO [206/273] IA — Nathan Sage (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IA00256/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.SAGEFORSENATE.COM
+INFO HTTP Request: GET https://www.sageforsenate.com "HTTP/1.1 404 Not Found"
+INFO   Website unreachable
+INFO [207/273] NE — Benjamin Sasse (Republican Party) [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4NE00090/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.TEAMSASSE.COM
+INFO   Website unreachable
+INFO [208/273] KS — Patrick Schmidt (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KS00288/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://PATRICKFORKANSAS.COM
+INFO HTTP Request: GET https://patrickforkansas.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [209/273] TX — Tony Schmoker (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00321/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://TONYSCHMOKER.COM
+INFO HTTP Request: GET https://tonyschmoker.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [210/273] IA — James Scholten (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IA00264/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.SCHOLTENFORIOWA.COM
+INFO HTTP Request: GET https://www.scholtenforiowa.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [211/273] MN — Adam Schwarze (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MN00457/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://SCHWARZEFORSENATE.COM
+INFO HTTP Request: GET https://schwarzeforsenate.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [212/273] MI — Genevieve Scott (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MI00434/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://SCOTTFORUSSENATE.COM
+INFO   Website unreachable
+INFO [213/273] LA — Kathy Seiden (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00573/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://KATHYSEIDEN.COM
+INFO HTTP Request: GET https://kathyseiden.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.kathyseiden.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [214/273] NH — Jeanne Shaheen (Democratic Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0NH00219/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://NONE
+INFO   Website unreachable
+INFO   Linked to voting record: S001181
+INFO [215/273] IL — Jump Shepherd (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00599/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JUMP2026.COM
+INFO HTTP Request: GET https://jump2026.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [216/273] AR — Hallie Shoffner (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AR00199/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.HALLIEFORARKANSAS.COM
+INFO   Website unreachable
+INFO [217/273] WV — Zachary Shrewsbury (Democratic Party)
+INFO   Website: not found
+INFO [218/273] DE — John Shulli (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6DE00198/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://SHULLI.ORG
+INFO HTTP Request: GET https://shulli.org "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [219/273] NC — Lichia Sibhatu (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2NC00547/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://WWW.LICHIAFORSENATE.COM
+INFO   Website unreachable
+INFO [220/273] NH — Tejasinha Sivalingam (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NH00133/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://SIVALINGAMFORSENATE.ORG
+INFO   Website unreachable
+INFO [221/273] WY — Jimmy Skovgard (Republican Party)
+INFO   Website: not found
+INFO [222/273] LA — Eric Skrmetta (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00672/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [223/273] MI — Bernadette Smith (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MI00517/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [224/273] VA — C.L Smith (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4VA00197/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.CHUCKSMITHVA.COM
+INFO HTTP Request: GET https://www.chucksmithva.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://slotdemopragmatic.org/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [225/273] OR — David Smith (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OR05218/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://DAVIDBROCKSMITHFOROREGON.COM
+INFO HTTP Request: GET https://davidbrocksmithfororegon.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.davidbrocksmithfororegon.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [226/273] MN — Tina Smith (Democratic Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S8MN00578/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTP://TINASMITHMN.COM
+INFO   Website unreachable
+INFO   Linked to voting record: S001203
+INFO [227/273] LA — Mark Spencer (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6LA00698/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://MARKFORLOUISIANA.COM
+INFO HTTP Request: GET https://markforlouisiana.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 10 categories
+INFO [228/273] KS — Sandy Spidel Neumann (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KS00262/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://SANDYFORKANSAS.COM
+INFO HTTP Request: GET https://sandyforkansas.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 2 categories
+INFO [229/273] MI — Haley Stevens (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MI00426/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.HALEYFORMI.COM
+INFO HTTP Request: GET https://www.haleyformi.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://haleyformi.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [230/273] KY — Pamela Stevenson (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00211/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://PAMELASTEVENSON.COM
+INFO HTTP Request: GET https://pamelastevenson.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://stevensonforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.stevensonforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 1 categories
+INFO [231/273] IL — Juliana Stratton (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00458/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JULIANASTRATTON.COM
+INFO HTTP Request: GET https://julianastratton.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.julianastratton.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [232/273] AK — Dan Sullivan (Republican Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4AK00214/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.DANSULLIVANFORALASKA.COM
+INFO   Website unreachable
+INFO   Linked to voting record: S001198
+INFO [233/273] NH — Jared Sullivan (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NH00190/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JAREDFORNH.COM
+INFO HTTP Request: GET https://www.jaredfornh.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [234/273] NH — John Sununu (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NH00208/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.SUNUNUSENATOR.COM
+INFO HTTP Request: GET https://www.sununusenator.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 3 categories
+INFO [235/273] IL — Christopher Swann (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00409/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [236/273] TX — Michael Swanson (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00396/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.MIKESWANSON.ORG
+INFO   Website unreachable
+INFO [237/273] OK — Tammy Swearengin (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04148/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [238/273] AL — Kyle Sweetser (Democratic Party)
+INFO   Website: not found
+INFO [239/273] NJ — Richard Tabor (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NJ00420/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://TABORFORSENATE.COM
+INFO HTTP Request: GET https://taborforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [240/273] MN — Michele Tafoya (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MN00556/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://MICHELETAFOYA.COM
+INFO   Website unreachable
+INFO [241/273] TX — James Talarico (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6TX00479/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://JAMESTALARICO.COM
+INFO HTTP Request: GET https://jamestalarico.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [242/273] MI — Joseph Tate (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MI00459/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [243/273] KS — Noah Taylor (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KS00296/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://NOAHFORKANSAS.COM
+INFO HTTP Request: GET https://noahforkansas.com "HTTP/1.1 308 Permanent Redirect"
+INFO HTTP Request: GET https://www.noahforkansas.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 2 categories
+INFO [244/273] OK — N'Kiyla Thomas (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04163/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.JASMINEFOROK.COM
+INFO   Website unreachable
+INFO [245/273] NC — Thom Tillis (Republican Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4NC00162/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.THOMTILLIS.COM
+INFO HTTP Request: GET https://www.thomtillis.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO   Linked to voting record: T000476
+INFO [246/273] MS — Priscilla Till (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MS00141/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://TILL4USSENATE2026.COM
+INFO   Website unreachable
+INFO [247/273] MS — Priscilla Till (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MS00158/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://TILL4USSENATE2026.COM
+INFO   Website unreachable
+INFO [248/273] IL — Don Tracy (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IL00615/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://DONTRACYFORIL.COM
+INFO HTTP Request: GET https://dontracyforil.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [249/273] AL — Thomas Tuberville (Republican Party) INCUMBENT [FEC INACTIVE]
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0AL00230/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://TOMMYFORSENATE.COM
+INFO   Website unreachable
+INFO   Linked to voting record: T000278
+INFO [250/273] IA — Joshua Turek (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IA00298/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://TUREK4IOWA.COM
+INFO   Website unreachable
+INFO [251/273] FL — Alexander Vindman (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00855/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ALEXVINDMAN.COM
+INFO HTTP Request: GET https://www.alexvindman.com "HTTP/1.1 403 Forbidden"
+INFO   Website unreachable
+INFO [252/273] OH — Christopher Volpe (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OH00353/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.VOLPEFORAMERICA.COM
+INFO HTTP Request: GET https://www.volpeforamerica.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [253/273] OH — Christopher Volpe (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OH00346/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.VOLPEFORAMERICA.COM
+INFO HTTP Request: GET https://www.volpeforamerica.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [254/273] IA — Zach Wahls (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6IA00272/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://ZACHWAHLS.COM
+INFO   Website unreachable
+INFO [255/273] AL — Rodney Walker (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AL00468/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.WALKERFORALABAMA.COM
+INFO HTTP Request: GET https://www.walkerforalabama.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 13 categories
+INFO [256/273] VA — Mark Warner (Democratic Party) INCUMBENT
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6VA00093/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://NONE
+INFO   Website unreachable
+INFO   Linked to voting record: W000805
+INFO [257/273] MN — Tom Weiler (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MN00515/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://WWW.TOMWEILER2026.COM
+INFO   Website unreachable
+INFO [258/273] FL — Joshua Weil (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S2FL00466/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JOSHWEIL.ORG
+INFO HTTP Request: GET https://www.joshweil.org "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [259/273] FL — Joshua Weil (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6FL00756/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.JOSHWEIL.US
+INFO HTTP Request: GET https://www.joshweil.us "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://joshweil.us/ "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://aonetenthouse.com/about-us/ "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.wingsbymezzo.com/shop "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://hmcdetailing.com/book-now/ "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://theberkeleyarms.pub/ "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://linklist.bio/tahun4dlink/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [260/273] KY — Donald Wenzel (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00393/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [261/273] AL — Everett Wess (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AL00518/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WESSFORSENATE.COM
+INFO HTTP Request: GET https://wessforsenate.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 4 categories
+INFO [262/273] NC — Michael Whatley (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6NC00415/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.MICHAELWHATLEY.COM
+INFO HTTP Request: GET https://www.michaelwhatley.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://michaelwhatley.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 9 categories
+INFO [263/273] AL — Mark Wheeler (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6AL00393/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.MARKWHEELERFORSENATE.COM
+INFO HTTP Request: GET https://www.markwheelerforsenate.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://markwheelerforsenate.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+WARNING Position extraction failed for Mark Wheeler: Extra data: line 12 column 1 (char 1101)
+INFO   Positions found: 0 categories
+INFO [264/273] MN — Royce White (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S4MN00502/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://ROYCEWHITE.US
+INFO   Website unreachable
+INFO [265/273] AR — Daniel Whitfield (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S0AR00218/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://DANFORARKANSAS.COM
+INFO   Website unreachable
+INFO [266/273] KY — Joel Willett (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6KY00336/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://HTTPS://JOELFORKENTUCKY.COM
+INFO   Website unreachable
+INFO [267/273] VA — David Williams (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6VA00200/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://DAVIDWILLIAMSFORVA.COM
+INFO HTTP Request: GET https://davidwilliamsforva.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://www.davidwilliamsforva.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 8 categories
+INFO [268/273] NC — Marcus Williams (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S8NC00270/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WILLIAMSHOUSEUSA.COM
+INFO HTTP Request: GET https://williamshouseusa.com "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 0 categories
+INFO [269/273] WV — Thomas Willis (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6WV00162/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [270/273] OK — Ervin Yen (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6OK04270/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: not found
+INFO [271/273] MN — Mark York (Republican Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6MN00549/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.YORKFORMN.COM
+INFO HTTP Request: GET https://www.yorkformn.com "HTTP/1.1 301 Moved Permanently"
+INFO HTTP Request: GET https://yorkformn.com/ "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO   Positions found: 4 categories
+INFO [272/273] NJ — Alex Zdan (Republican Party)
+INFO   Website: not found
+INFO [273/273] CO — Anthony Zimpfer (Democratic Party)
+INFO HTTP Request: GET https://api.open.fec.gov/v1/candidate/S6CO00465/committees/?per_page=10&api_key=E4XlIMHe201a1psflmk796ley9UguYqAdIIS1WQM "HTTP/1.1 200 OK"
+INFO   Website: https://WWW.ZIMPFER4CO.COM
+INFO HTTP Request: GET https://www.zimpfer4co.com "HTTP/1.1 404 Not Found"
+INFO   Website unreachable
+INFO 
+Done. Saved: 273 | Skipped (existing): 0 | No website: 148 | No positions: 209
