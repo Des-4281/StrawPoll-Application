@@ -154,6 +154,15 @@ class Bill(Base):
     status: Mapped[str | None] = mapped_column(String(100))
     congress: Mapped[int | None] = mapped_column(Integer, index=True)
     chamber: Mapped[str | None] = mapped_column(String(10))  # House / Senate
+
+    # --- Tagging fields (populated by tag_bills.py) ---
+    # List of issue categories from the 22-category taxonomy.
+    tags: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    # "Bill", "Joint Resolution", "Resolution", or "Procedural"
+    bill_type: Mapped[str | None] = mapped_column(String(20))
+    # True if this bill covers many unrelated policy areas (e.g. appropriations omnibus).
+    is_omnibus: Mapped[bool] = mapped_column(default=False, nullable=False)
+
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
