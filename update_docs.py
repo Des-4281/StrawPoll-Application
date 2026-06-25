@@ -117,7 +117,7 @@ Do not add any preamble or explanation outside the document itself.
     print("Sending to Claude (this may take 30-60 seconds)...")
 
     response = claude.messages.create(
-        model="claude-opus-4-8",
+        model="claude-sonnet-4-6",
         max_tokens=8192,
         messages=[{"role": "user", "content": prompt}],
     )

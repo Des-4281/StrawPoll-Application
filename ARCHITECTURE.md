@@ -44,9 +44,11 @@ StrawPoll Application/
 ├── tag_bills.py         — One-time tagging script (issue categories per bill)
 ├── summarize_bills.py   — On-demand bill text fetcher + Claude summarizer
 ├── update_docs.py       — On-demand ARCHITECTURE.md updater (reads BUILD_LOG, uses Claude)
-├── ARCHITECTURE.md      — Technical reference: schema, data sources, API, setup
+├── README.md            — Start here: guided reading order, quick setup, file guide
 ├── PROBLEM.md           — Plain English: what problems this solves and why each feature exists
 ├── STORY.md             — Development journal: how it was built, step by step, and why
+├── ARCHITECTURE.md      — Technical reference: schema, data sources, API, setup
+├── NEXT_STEPS.md        — Personal action list: what to do next and in what order
 ├── BUILD_LOG.md         — Auto-written after every git commit by the post-commit hook
 ├── requirements.txt     — Python dependencies
 ├── .env                 — API keys (never commit this file)
@@ -339,17 +341,26 @@ uvicorn main:app --reload --port 8001
 
 ## Viewing the Database
 
-**DB Browser for SQLite** (recommended): Free GUI app at sqlitebrowser.org. Open `strawpoll.db`, browse tables, run SQL queries, export to CSV.
+**Option 1 — VS Code extension (easiest, no install needed beyond VS Code):**
+1. Open VS Code Extensions panel: ⌘⇧X (Mac) or Ctrl+Shift+X (Windows)
+2. Search: `SQLite Viewer`
+3. Install the one by **Florian Klampfer** (extension ID: `qwtel.sqlite-viewer`)
+4. Right-click `strawpoll.db` in the VS Code file explorer → **Open With → SQLite Viewer**
+5. Click any table name in the left panel to browse rows. Use the SQL tab to run queries.
 
-**VS Code extension**: Install "SQLite Viewer" by Florian Klampfer. Right-click `strawpoll.db` → Open With → SQLite Viewer. No extra app needed.
+**Option 2 — DB Browser for SQLite (full desktop app, free):**
+Download from sqlitebrowser.org. Open `strawpoll.db`, browse tables, run SQL queries, export to CSV. Best option if you want to edit data directly.
 
-**Command line:**
+**Option 3 — Command line:**
 ```bash
 sqlite3 strawpoll.db
-.tables
-SELECT COUNT(*) FROM votes;
+.tables                                          # list all tables
+.schema bills                                    # show columns for bills table
+SELECT COUNT(*) FROM votes;                      # 54,960 rows
 SELECT * FROM bills WHERE bill_type = 'Bill' LIMIT 10;
-SELECT name, state, party FROM politicians WHERE chamber = 'Senate';
+SELECT name, state, party FROM politicians LIMIT 10;
+SELECT bill_number, tags FROM bills WHERE tags != '[]' LIMIT 5;
+.quit
 ```
 
 ---
