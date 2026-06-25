@@ -44,7 +44,9 @@ StrawPoll Application/
 ├── tag_bills.py         — One-time tagging script (issue categories per bill)
 ├── summarize_bills.py   — On-demand bill text fetcher + Claude summarizer
 ├── update_docs.py       — On-demand ARCHITECTURE.md updater (reads BUILD_LOG, uses Claude)
-├── ARCHITECTURE.md      — This document — project explainer for humans and devs
+├── ARCHITECTURE.md      — Technical reference: schema, data sources, API, setup
+├── PROBLEM.md           — Plain English: what problems this solves and why each feature exists
+├── STORY.md             — Development journal: how it was built, step by step, and why
 ├── BUILD_LOG.md         — Auto-written after every git commit by the post-commit hook
 ├── requirements.txt     — Python dependencies
 ├── .env                 — API keys (never commit this file)
