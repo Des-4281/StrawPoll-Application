@@ -42,6 +42,7 @@ StrawPoll Application/
 ├── services.py          — LegiScan API client (live bill lookups)
 ├── seed_db.py           — One-time data import script (politicians + votes)
 ├── tag_bills.py         — One-time tagging script (issue categories per bill)
+├── seed_candidates.py   — Imports 2026 Senate candidates from FEC + extracts positions from campaign websites
 ├── summarize_bills.py   — On-demand bill text fetcher + Claude summarizer
 ├── update_docs.py       — On-demand ARCHITECTURE.md updater (reads BUILD_LOG, uses Claude)
 ├── README.md            — Start here: guided reading order, quick setup, file guide
@@ -122,6 +123,27 @@ House districts only. Senators don't have district rows. Populated optionally fr
 | last_rep_pct | FLOAT | Rep % in most recent election |
 | last_margin | FLOAT | rep_pct - dem_pct (positive = R won) |
 | last_election_year | INT | Year of the result stored |
+
+### `candidates`
+One row per person running for office in an upcoming election. Populated by `seed_candidates.py`.
+
+| Column | Type | Notes |
+|---|---|---|
+| id | INT PK | Auto-increment |
+| name | TEXT | Full name (normalized from FEC "LAST, FIRST" format) |
+| state | TEXT | Two-letter state code |
+| party | TEXT | "Democratic Party", "Republican Party", etc. |
+| election_year | INT | 2026 |
+| office | TEXT | "Senate" (House added later) |
+| incumbent | BOOL | True if they currently hold the seat |
+| bioguide_id | TEXT FK | → politicians.bioguide_id, if they're a sitting senator |
+| website_url | TEXT | Campaign website URL (from FEC committee record) |
+| ballotpedia_url | TEXT | Constructed Ballotpedia link for reference |
+| positions | JSON | Stated positions mapped to our 22 categories: `{"Healthcare": "Supports..."}` |
+| positions_source | TEXT | Where positions came from: "campaign website", "fec-no-website", etc. |
+| positions_updated_at | DATETIME | When positions were last fetched |
+
+**Why this matters:** Incumbents have a voting record (in the `votes` table) AND stated positions (in `candidates.positions`). Challengers only have stated positions. The comparison between what incumbents *say* and how they *vote* is a key feature.
 
 ### `users`, `user_favorites`, `chat_sessions`
 App user tables. Users sign up with email, can save favorite politicians/bills, and have chat history with the AI stored as a JSON message list per session.
@@ -333,7 +355,12 @@ python seed_db.py
 # 6. Tag all bills (uses Congress.gov API, ~10 min)
 python tag_bills.py
 
-# 7. Start the server
+# 7. Seed 2026 Senate candidates (requires free FEC API key from api.data.gov/signup)
+# Add FEC_API_KEY to .env first, then:
+python seed_candidates.py --dry-run   # preview
+python seed_candidates.py             # full import (~270 candidates, ~30 min)
+
+# 8. Start the server
 uvicorn main:app --reload --port 8001
 ```
 
@@ -428,6 +455,7 @@ SELECT bill_number, tags FROM bills WHERE tags != '[]' LIMIT 5;
 | `theunitedstates.io` | 118th Congress and older bulk vote data | No | Hasn't published 119th yet |
 | LegiScan API | Bill search, details, status, sponsors | Yes (free) | Better search than Congress.gov |
 | Congress.gov API | Bill subject tags, full bill text | Yes (free) | Official; subject tags are human-assigned |
+| FEC API (api.open.fec.gov) | 2026 Senate candidates: name, state, party, incumbency, committee website URL | Yes (free, instant at api.data.gov/signup) | Official federal source; 309 funded D/R candidates |
 | MIT Election Lab | House election results by district (1976–present) | No | Harvard Dataverse, CC license |
 | Cook Political Report | Cook PVI (district partisan lean) | Paywalled | GitHub aggregators exist |
 

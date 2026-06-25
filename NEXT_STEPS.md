@@ -28,7 +28,21 @@ Run this after a batch of related commits — not after every single one. It rew
 Open VS Code → Extensions (⌘⇧X) → search **SQLite Viewer** → install the one by **Florian Klampfer**.
 Then right-click `strawpoll.db` → Open With → SQLite Viewer to browse your data.
 
-### 2. Push the latest commits to GitHub
+### 2. Get a free FEC API key
+The FEC (Federal Election Commission) is the official source for candidate data. Without a real key you're limited to 60 requests/hour (DEMO_KEY), which is too slow for the full candidate list.
+
+1. Go to: **https://api.data.gov/signup/**
+2. Enter your email — the key arrives instantly
+3. Add it to your `.env` file: `FEC_API_KEY=your-key-here`
+
+Then seed 2026 Senate candidates:
+```bash
+python seed_candidates.py --dry-run        # see what will be imported (no API cost)
+python seed_candidates.py --state GA       # test with one state first
+python seed_candidates.py                  # all ~270 D/R funded candidates
+```
+
+### 3. Push the latest commits to GitHub
 ```bash
 git push
 ```

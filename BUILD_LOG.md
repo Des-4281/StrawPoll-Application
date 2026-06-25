@@ -91,3 +91,11 @@ Update post-commit hook to prompt for Claude doc update
 
 Simplify post-commit hook — remove interactive Claude prompt, add commit workflow to NEXT_STEPS
 ---
+
+## [6c31baf] 2026-06-25 02:48 — David Solorio
+**Hash:** 6c31baf92ddddf833047c1a56d09247a00762cb9
+**Files:** BUILD_LOG.md,STORY.md,
+**Lines:** +35 / -0
+
+Update BUILD_LOG and STORY with recent documentation system changes
+---

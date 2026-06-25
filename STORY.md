@@ -216,3 +216,41 @@ Simplify post-commit hook — remove interactive Claude prompt, add commit workf
 > *Run `python update_docs.py` to expand this into a narrative entry.*
 
 ---
+
+### [6c31baf] 2026-06-25 02:48 — Update BUILD_LOG and STORY with recent documentation system changes
+**Files:** BUILD_LOG.md,STORY.md,
+
+Update BUILD_LOG and STORY with recent documentation system changes
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---
+
+### Step 9 — Adding 2026 Senate Candidates (`seed_candidates.py`, `models.py`)
+
+**The problem:** Voting records tell you what sitting senators have done. But what about the people challenging them? And when an election is coming up, users need to compare candidates — not just incumbents' records, but challengers' stated positions too.
+
+This required a new table (`candidates`) and a new data pipeline.
+
+**Why FEC as the data source:**
+The first instinct was to use Ballotpedia — it's a popular nonpartisan source for election data. But Ballotpedia blocks all API access (their MediaWiki API returns a 202 with an empty body). Their HTML pages are also blocked.
+
+Instead we went to the FEC (Federal Election Commission) — the official US government source for candidate filings. Every candidate who legally files for federal office appears there. The API is free, returns clean JSON, and is not throttled for registered users. Getting an API key takes 30 seconds at api.data.gov/signup.
+
+**What FEC gives us:**
+- Candidate name, state, party, incumbency status (incumbent/challenger/open seat)
+- Campaign committee records, which include the campaign website URL
+
+**What FEC doesn't give us:**
+Policy positions — that's not FEC's job. For positions, we fetch the candidate's campaign website and use Claude Sonnet 4.6 to extract their stated positions and map them to our 22 issue categories. The same neutral framing applies: "Supports X" and "Opposes Y" — factual descriptions, not political labels.
+
+**The incumbent link:**
+If a candidate is a sitting senator (incumbent), we link their `candidates` row to their `politicians` row using `bioguide_id`. This means for incumbents, you have both their stated campaign positions AND their actual voting record. Comparing those two things — what they say vs. what they vote — is a feature we'll build in Phase 2.
+
+**The DEMO_KEY problem:**
+FEC's DEMO_KEY allows 60 requests per hour — too slow for 273 candidates. The script detects which key you're using and increases the delay accordingly, but a real FEC key (free, instant) is needed for a full run.
+
+**The FEC name format problem:**
+FEC stores names as "LAST, FIRST MIDDLE" in all caps. Some entries put a middle initial before the actual first name (e.g. "OSSOFF, T. JON" instead of "OSSOFF, JON T"). We built a name formatter that detects and skips single-character initials.
+
+---

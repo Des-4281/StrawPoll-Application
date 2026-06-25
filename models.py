@@ -194,6 +194,48 @@ class Vote(Base):
     bill: Mapped["Bill"] = relationship("Bill", back_populates="votes")
 
 
+# --- Candidate Tables ---
+# Candidates running for office in upcoming elections.
+# Populated by seed_candidates.py, which scrapes Ballotpedia for race/candidate data
+# and uses Claude to normalize stated positions into our 22-category taxonomy.
+
+class Candidate(Base):
+    __tablename__ = "candidates"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    state: Mapped[str] = mapped_column(String(2), nullable=False, index=True)
+    party: Mapped[str | None] = mapped_column(String(50))
+    election_year: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    office: Mapped[str] = mapped_column(String(20), nullable=False)  # "Senate" / "House"
+    incumbent: Mapped[bool] = mapped_column(default=False, nullable=False)
+
+    # If they're a sitting senator, link to their voting record
+    bioguide_id: Mapped[str | None] = mapped_column(
+        String(10), ForeignKey("politicians.bioguide_id"), nullable=True, index=True
+    )
+
+    website_url: Mapped[str | None] = mapped_column(String(500))
+    ballotpedia_url: Mapped[str | None] = mapped_column(String(500))
+
+    # Stated positions mapped to our 22-category taxonomy.
+    # Format: {"Healthcare": "Supports expanding Medicaid", "Immigration": "Opposes amnesty"}
+    # Values are neutral factual descriptions of what the candidate says they support/oppose.
+    positions: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+
+    # Where the position data came from: "ballotpedia", "website", "claude-inference"
+    positions_source: Mapped[str | None] = mapped_column(String(100))
+    positions_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    politician: Mapped["Politician | None"] = relationship(
+        "Politician", foreign_keys=[bioguide_id]
+    )
+
+
 # --- User & App Tables ---
 # These tables are written to by the app as users sign up, chat, and save favorites.
 
