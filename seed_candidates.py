@@ -157,7 +157,7 @@ async def fetch_candidate_website(
             for committee in r.json().get("results", []):
                 website = committee.get("website")
                 if website:
-                    website = website.strip()
+                    website = website.strip().lower()  # FEC stores in all-caps
                     if not website.startswith("http"):
                         website = "https://" + website
                     return website.rstrip("/")

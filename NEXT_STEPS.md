@@ -31,7 +31,7 @@ Then right-click `strawpoll.db` → Open With → SQLite Viewer to browse your d
 ### 2. ✅ FEC API key — Done
 You have a real key in `.env` (`FEC_API_KEY`). All 273 2026 Senate filers are now in the DB.
 
-**To update who is actually in the general election:**
+**To update who is actually in the general election:** AKA Look up whos still running! 
 The DB has everyone who raised money and filed with FEC — that includes primary losers.
 After each state's primary, update the winners and losers manually:
 
@@ -69,6 +69,14 @@ AK, AL, AR, CO, DE, GA, IA, ID, IL, KS, KY, LA, MA, ME, MI, MN, MS, MT, NC, NE, 
 **To check race status weekly for withdrawal/suspension:**
 ```bash
 python seed_candidates.py --check-status   # scans campaign websites for withdrawal language
+```
+
+### 3. Run one more seed refresh (fix URL casing)
+A bug was discovered mid-run: FEC sometimes stores URLs in all-caps (`"HTTPS://WWW.SITE.COM"`).
+The fix is already in the code. Run this once to re-fetch positions for candidates who got
+a bad URL on the first pass (like McMorrow in MI):
+```bash
+python seed_candidates.py --refresh
 ```
 
 ### 3. Push the latest commits to GitHub
