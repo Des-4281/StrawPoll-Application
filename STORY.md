@@ -255,6 +255,22 @@ FEC stores names as "LAST, FIRST MIDDLE" in all caps. Some entries put a middle 
 
 ---
 
+### Step 11 — Fixing Two Seed Bugs and Simplifying Race Status Logic
+
+**Bug 1 — Website URLs were silently discarded:**
+When we ran the first full seed of 273 candidates, every single one came back "Website: not found" — even John Hickenlooper, a sitting senator with an active campaign. The FEC committee endpoint stores website URLs without the `http://` scheme: just `"HICKENLOOPER.COM"`. Our code checked `if website.startswith("http")` which silently rejected every URL in the FEC system. Fixed by prepending `https://` when the URL has no scheme.
+
+**Bug 2 — FEC's `candidate_inactive` flag is not a withdrawal signal:**
+We assumed `candidate_inactive = True` meant a candidate dropped out. After the first run, 10 candidates were marked as "withdrawn" — but they included Tommy Tuberville, Steve Daines, Thom Tillis, and Tina Smith, all of whom are actively running in 2026. The FEC flag appears to be an administrative field that doesn't reliably indicate campaign termination. It may flag candidates whose older FEC committee records were closed or whose committee designation changed. The flag was removed entirely from the withdrawal logic. Status is now determined only by explicit keyword scanning of campaign websites.
+
+**Added `needs_update` flag:**
+Many candidates (especially minor primary candidates) have no campaign website in FEC records, so we can't extract their positions. The `needs_update` boolean column flags these rows so they can be prioritized for manual data entry or follow-up collection. When positions are successfully extracted, the flag is cleared automatically by the seed script.
+
+**33 states, ~2 candidates each:**
+The FEC data has 273 filers because it includes everyone who raised any money and filed for the race — including primary losers, candidates who dropped out early, and minor candidates. The real universe is 33 states with Senate races in 2026 (Class 2 seats, last elected 2020), with 2 general election candidates per state once primaries are done. After each state's primary, nominees are manually marked `primary_winner` and losers as `primary_loser` using the SQL in NEXT_STEPS.md.
+
+---
+
 ### Step 10 — Tracking Who's Still in the Race (`race_status`, `fec_candidate_id`, `--check-status`)
 
 **The problem:** After we seed candidates, the race doesn't stand still. People drop out, suspend their campaigns, lose primaries. If we don't track this, the app will show users candidates who are no longer running — which is confusing and potentially misleading.
@@ -318,6 +334,46 @@ Usage:
 Updated: ARCHITECTURE.md (candidates schema, new data source, setup step),
 NEXT_STEPS.md (FEC key instructions), STORY.md (narrative for this step),
 .env.example (FEC_API_KEY placeholder)
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---
+
+### [edfcf20] 2026-06-25 03:12 — Add race status tracking and --check-status mode for 2026 Senate candidates
+**Files:** ARCHITECTURE.md,NEXT_STEPS.md,STORY.md,models.py,seed_candidates.py,
+
+Add race status tracking and --check-status mode for 2026 Senate candidates
+
+models.py — three new columns on the candidates table:
+  - race_status: "declared", "suspended", "withdrawn", "primary_winner", "primary_loser"
+  - race_status_updated_at: timestamp of last status check
+  - fec_candidate_id: FEC's unique ID (e.g. "S8GA00180") stored for re-querying
+
+seed_candidates.py:
+  - Save block now stores fec_candidate_id and sets initial race_status from
+    FEC's candidate_inactive flag (withdrawn if inactive, declared otherwise)
+  - Website fetch checks for withdrawal/suspension language before extracting
+    positions — skips position extraction for withdrawn candidates
+  - New check_candidate_status() async function: re-checks FEC inactive flag
+    and website keywords for every declared candidate, updates race_status
+  - New _check_website_for_withdrawal() helper: keyword scan for phrases like
+    "suspending my campaign", "dropped out", "no longer a candidate" — no AI
+    needed, fast, free to run weekly
+  - New --check-status CLI flag: runs status check mode instead of seed mode
+  - --check-status --state GA: check one state only
+
+DB migration: added three columns to existing candidates table via
+  ALTER TABLE ADD COLUMN (SQLite supports this with default values)
+
+ARCHITECTURE.md: updated candidates schema table with all new columns,
+  added race_status values documentation, added Step 3 for seed_candidates,
+  updated Phase 1 roadmap to mark candidate tracking complete
+
+STORY.md: added Step 10 explaining the race status design, why keyword
+  matching is used instead of Claude (cost), and how the two signals work
+
+NEXT_STEPS.md: marked FEC key as done, added --check-status usage note,
+  renumbered action items
 
 > *Run `python update_docs.py` to expand this into a narrative entry.*
 

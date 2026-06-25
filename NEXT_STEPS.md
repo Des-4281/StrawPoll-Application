@@ -29,13 +29,47 @@ Open VS Code → Extensions (⌘⇧X) → search **SQLite Viewer** → install t
 Then right-click `strawpoll.db` → Open With → SQLite Viewer to browse your data.
 
 ### 2. ✅ FEC API key — Done
-You have a real key in `.env` (`FEC_API_KEY`). The full candidate seed is running now.
+You have a real key in `.env` (`FEC_API_KEY`). All 273 2026 Senate filers are now in the DB.
 
-**To check race status weekly:**
-```bash
-python seed_candidates.py --check-status   # re-checks who is still in the race
+**To update who is actually in the general election:**
+The DB has everyone who raised money and filed with FEC — that includes primary losers.
+After each state's primary, update the winners and losers manually:
+
+```python
+# Run this in a Python shell after primary results are in
+import sqlite3, datetime
+conn = sqlite3.connect('strawpoll.db')
+c = conn.cursor()
+now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+# Mark the general election nominees (replace with actual names)
+winners = [
+    ('Jon Ossoff', 'GA'),       # Example: GA Democratic nominee
+    ('Brian Kemp', 'GA'),       # Example: GA Republican nominee
+    # Add all 33 states' nominees here
+]
+for name, state in winners:
+    c.execute("UPDATE candidates SET race_status='primary_winner', race_status_updated_at=? WHERE name=? AND state=?", (now, name, state))
+
+# Mark primary losers
+c.execute("""
+    UPDATE candidates SET race_status='primary_loser', race_status_updated_at=?
+    WHERE race_status='declared' AND state IN (
+        'GA'  -- add states where primary is done
+    ) AND name NOT IN (SELECT name FROM candidates WHERE race_status='primary_winner')
+""", (now,))
+
+conn.commit()
+conn.close()
 ```
-This checks FEC's inactive flag and scans campaign websites for withdrawal language. Run it weekly during campaign season to keep `race_status` current.
+
+**33 states have 2026 Senate races** (Class 2 seats — last elected in 2020):
+AK, AL, AR, CO, DE, GA, IA, ID, IL, KS, KY, LA, MA, ME, MI, MN, MS, MT, NC, NE, NH, NJ, NM, OK, OR, RI, SC, SD, TN, TX, VA, WV, WY
+
+**To check race status weekly for withdrawal/suspension:**
+```bash
+python seed_candidates.py --check-status   # scans campaign websites for withdrawal language
+```
 
 ### 3. Push the latest commits to GitHub
 ```bash

@@ -209,6 +209,9 @@ class Candidate(Base):
     office: Mapped[str] = mapped_column(String(20), nullable=False)  # "Senate" / "House"
     incumbent: Mapped[bool] = mapped_column(default=False, nullable=False)
 
+    # True when this candidate has no positions extracted yet — needs a website or manual entry
+    needs_update: Mapped[bool] = mapped_column(default=True, nullable=False)
+
     # Race status — updated by seed_candidates.py --check-status
     # "declared"  — actively running (FEC shows active, no withdrawal signals)
     # "suspended" — campaign paused (language on website or FEC inactive flag)

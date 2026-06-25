@@ -156,7 +156,10 @@ async def fetch_candidate_website(
             r.raise_for_status()
             for committee in r.json().get("results", []):
                 website = committee.get("website")
-                if website and website.startswith("http"):
+                if website:
+                    website = website.strip()
+                    if not website.startswith("http"):
+                        website = "https://" + website
                     return website.rstrip("/")
             return None
         except Exception as e:
@@ -303,14 +306,15 @@ async def seed_candidates(
             state = fec_data["state"]
             party_full = fec_data.get("party_full", "").title()
             incumbent = fec_data.get("incumbent_challenge", "") == "I"
-            # FEC marks withdrawn/inactive candidates — use as first status signal
-            fec_inactive = fec_data.get("candidate_inactive", False)
-            race_status = "withdrawn" if fec_inactive else "declared"
+            # Start all candidates as "declared" — the FEC candidate_inactive flag is NOT
+            # a withdrawal signal. It's an administrative flag that's set for many active
+            # candidates including sitting senators who are running. Status is determined
+            # instead by the website keyword scan below.
+            race_status = "declared"
 
-            log.info("[%d/%d] %s — %s (%s)%s%s",
+            log.info("[%d/%d] %s — %s (%s)%s",
                      i + 1, len(candidates), state, name, party_full,
-                     " INCUMBENT" if incumbent else "",
-                     " [FEC INACTIVE]" if fec_inactive else "")
+                     " INCUMBENT" if incumbent else "")
 
             async with AsyncSessionLocal() as db:
                 existing = await db.execute(
@@ -374,6 +378,7 @@ async def seed_candidates(
                         bioguide_id = matches[0].bioguide_id
                         log.info("  Linked to voting record: %s", bioguide_id)
 
+            data_complete = bool(positions)  # True when we have at least some positions
             async with AsyncSessionLocal() as db:
                 if existing_row:
                     row = await db.get(Candidate, existing_row.id)
@@ -383,6 +388,7 @@ async def seed_candidates(
                     row.race_status = race_status
                     row.race_status_updated_at = datetime.now(timezone.utc)
                     row.website_url = website_url
+                    row.needs_update = not data_complete
                     row.positions = positions
                     row.positions_source = positions_source
                     row.positions_updated_at = datetime.now(timezone.utc)
@@ -396,6 +402,7 @@ async def seed_candidates(
                         election_year=2026,
                         office="Senate",
                         incumbent=incumbent,
+                        needs_update=not data_complete,
                         fec_candidate_id=candidate_id,
                         race_status=race_status,
                         race_status_updated_at=datetime.now(timezone.utc),
@@ -419,13 +426,16 @@ async def seed_candidates(
 
 async def check_candidate_status(filter_state: str | None = None) -> None:
     """
-    Re-check race status for all declared candidates.
-    Signals checked (in order):
-      1. FEC candidate_inactive flag — most reliable signal a campaign is over
-      2. Website withdrawal/suspension language — catches campaigns that paused
-         without filing FEC termination paperwork
+    Re-check race status for all declared candidates by scanning their campaign
+    websites for withdrawal or suspension language. Updates race_status and
+    race_status_updated_at for any candidate where the status changes.
+
+    Note: FEC's candidate_inactive flag is NOT used — it's an administrative flag
+    that's incorrectly set for many active candidates including sitting senators.
 
     Run this periodically (weekly during active campaign season) to keep status current.
+    After primaries, manually set race_status = 'primary_winner' or 'primary_loser'
+    for the nominees in each state — see NEXT_STEPS.md.
     """
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -449,25 +459,11 @@ async def check_candidate_status(filter_state: str | None = None) -> None:
 
             new_status = None
 
-            # Check FEC for inactive flag
-            if cand.fec_candidate_id:
-                await asyncio.sleep(0.3)
-                try:
-                    r = await client.get(
-                        f"{FEC_BASE}/candidate/{cand.fec_candidate_id}/",
-                        params={"api_key": FEC_API_KEY},
-                        timeout=15.0,
-                    )
-                    if r.status_code == 200:
-                        fec_result = r.json().get("results", [{}])[0]
-                        if fec_result.get("candidate_inactive"):
-                            new_status = "withdrawn"
-                            log.info("  FEC shows inactive → withdrawn")
-                except Exception as e:
-                    log.debug("FEC check failed: %s", e)
-
-            # Check website for withdrawal language if FEC didn't flag it
-            if not new_status and cand.website_url:
+            # Check website for withdrawal language.
+            # Note: FEC's candidate_inactive flag is NOT a reliable withdrawal signal —
+            # it's an administrative flag that's set for many active candidates including
+            # sitting senators who are still running. We rely on website keyword scanning only.
+            if cand.website_url:
                 website_text = await fetch_website_text(client, cand.website_url)
                 if website_text:
                     new_status = _check_website_for_withdrawal(website_text)

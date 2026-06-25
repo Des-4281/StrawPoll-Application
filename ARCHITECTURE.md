@@ -136,6 +136,7 @@ One row per person running for office in an upcoming election. Populated by `see
 | election_year | INT | 2026 |
 | office | TEXT | "Senate" (House added later) |
 | incumbent | BOOL | True if they currently hold the seat |
+| needs_update | BOOL | True when no positions have been extracted yet — flag for manual follow-up |
 | race_status | TEXT | "declared", "suspended", "withdrawn", "primary_winner", "primary_loser" |
 | race_status_updated_at | DATETIME | When race_status was last checked |
 | fec_candidate_id | TEXT | FEC candidate ID (e.g. `S8GA00180`) — used to re-query FEC for updates |
@@ -152,9 +153,12 @@ One row per person running for office in an upcoming election. Populated by `see
 - `withdrawn` — formally dropped out (FEC inactive flag or clear withdrawal language on site)
 - `primary_winner` / `primary_loser` — set after primary results are certified
 
-**How race_status is determined** (`seed_candidates.py --check-status`):
-1. FEC `candidate_inactive` flag — most reliable signal a campaign formally ended
-2. Keyword scan of campaign website for withdrawal/suspension language ("suspending my campaign", "no longer a candidate", etc.) — catches campaigns that stepped back without filing FEC termination paperwork
+**How race_status is determined:**
+- Initial seed: starts all candidates as "declared". If their website contains explicit withdrawal/suspension language, it's updated at seed time.
+- `--check-status` mode: re-scans all declared candidates' websites for withdrawal language. Run weekly during campaign season.
+- After primaries: manually update nominees to `primary_winner` and everyone else in that state to `primary_loser`. See NEXT_STEPS.md for the SQL to do this.
+
+**Important:** FEC's `candidate_inactive` field is NOT used for withdrawal detection. Despite its name, it's an administrative flag that's set for many actively-running candidates including sitting senators. It does not reliably indicate withdrawal from the current race.
 
 **Why this matters:** Incumbents have a voting record (in the `votes` table) AND stated positions (in `candidates.positions`). Challengers only have stated positions. The comparison between what incumbents *say* and how they *vote* is a key feature for Phase 2.
 
@@ -236,11 +240,15 @@ python seed_candidates.py --check-status --state GA  # check one state only
 ```
 
 **What `--check-status` does:** For every candidate whose `race_status` is "declared", it:
-1. Hits FEC's `/candidate/{id}/` endpoint and checks the `candidate_inactive` flag
-2. Fetches the candidate's campaign website and scans for withdrawal/suspension language
-3. Updates `race_status` and `race_status_updated_at` if a change is detected
+1. Fetches the candidate's campaign website and scans for withdrawal/suspension keywords
+2. Updates `race_status` and `race_status_updated_at` for any candidate where the status changes
 
-Run this weekly during active campaign season to catch candidates who drop out.
+Run this weekly during campaign season to catch candidates who drop out.
+
+**After primaries:** Update nominees to `primary_winner` and losers to `primary_loser` via the SQL snippet in NEXT_STEPS.md. The `needs_update` flag marks candidates where no positions have been extracted — useful for prioritizing manual data collection.
+
+**2026 Senate races — 33 states (Class 2 seats, last elected 2020):**
+AK, AL, AR, CO, DE, GA, IA, ID, IL, KS, KY, LA, MA, ME, MI, MN, MS, MT, NC, NE, NH, NJ, NM, OK, OR, RI, SC, SD, TN, TX, VA, WV, WY
 
 ### Step 4: Summarize bills (`summarize_bills.py`)
 
