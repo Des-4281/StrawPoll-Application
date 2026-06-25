@@ -4,6 +4,24 @@ This is your personal action list. In order of priority.
 
 ---
 
+## Every Time You Commit
+
+The post-commit hook runs automatically and logs everything to BUILD_LOG.md and STORY.md for free. After it runs, you'll see this in your terminal:
+
+```
+→ Logged commit abc1234 to BUILD_LOG.md
+→ STORY.md updated
+  (Optional: run 'python update_docs.py' to update docs with Claude)
+```
+
+**If you want to update the docs (optional, costs ~$0.30 in tokens):**
+```bash
+python update_docs.py
+```
+Run this after a batch of related commits — not after every single one. It rewrites ARCHITECTURE.md and STORY.md to reflect everything in BUILD_LOG.md, and flags anything inconsistent between the docs and the code.
+
+---
+
 ## Right Now (Before Anything Else)
 
 ### 1. Install the SQLite Viewer extension
