@@ -74,3 +74,20 @@ Add README, NEXT_STEPS, SQLite Viewer docs, and token-saving improvements
 - post-commit hook: skip STORY.md entries for typo/formatting/style/whitespace commits;
   keep refactoring and all feature/fix commits; BUILD_LOG still captures everything
 ---
+
+## [69c22c7] 2026-06-25 02:42 — David Solorio
+**Hash:** 69c22c7ccc2b36818ce56a68ba8a95273d3fa41e
+**Files:** BUILD_LOG.md,STORY.md,
+**Lines:** +72 / -0
+
+Update post-commit hook to prompt for Claude doc update
+---
+   (doc update prompt skipped — non-interactive terminal)
+
+## [5e9e5a4] 2026-06-25 02:43 — David Solorio
+**Hash:** 5e9e5a45caf81bc5488b6b541fa73bd89223aa7f
+**Files:** NEXT_STEPS.md,
+**Lines:** +18 / -0
+
+Simplify post-commit hook — remove interactive Claude prompt, add commit workflow to NEXT_STEPS
+---

@@ -198,3 +198,21 @@ Add README, NEXT_STEPS, SQLite Viewer docs, and token-saving improvements
 > *Run `python update_docs.py` to expand this into a narrative entry.*
 
 ---
+
+### [69c22c7] 2026-06-25 02:42 — Update post-commit hook to prompt for Claude doc update
+**Files:** BUILD_LOG.md,STORY.md,
+
+Update post-commit hook to prompt for Claude doc update
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---
+
+### [5e9e5a4] 2026-06-25 02:43 — Simplify post-commit hook — remove interactive Claude prompt, add commit workflow to NEXT_STEPS
+**Files:** NEXT_STEPS.md,
+
+Simplify post-commit hook — remove interactive Claude prompt, add commit workflow to NEXT_STEPS
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---
