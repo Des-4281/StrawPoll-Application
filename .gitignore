@@ -1,0 +1,23 @@
+# Claude Code local config and architecture notes — keep private
+.claude/
+
+# Environment — contains real API keys, never commit this
+.env
+
+# Database file — this is your local data, not source code
+*.db
+*.db-shm
+*.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# macOS
+.DS_Store
