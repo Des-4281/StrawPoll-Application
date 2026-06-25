@@ -161,3 +161,40 @@ For display, instead of a score, the app shows: "Senator X voted to increase def
 *New entries are appended below automatically after each git commit. Run `python update_docs.py` to have Claude rewrite recent entries into proper narrative format.*
 
 ---
+
+### [83ed9fe] 2026-06-25 02:37 — Add STORY.md, PROBLEM.md, and update post-commit hook
+**Files:** ARCHITECTURE.md,BUILD_LOG.md,PROBLEM.md,STORY.md,
+
+Add STORY.md, PROBLEM.md, and update post-commit hook
+
+- PROBLEM.md: plain-English explanation of the 5 problems StrawPoll solves
+  (vote invisibility, context gap, hidden fine print, polling vs. votes gap,
+  fragmented data) and how each feature maps to solving them
+- STORY.md: full development narrative — decisions made, problems hit,
+  why each piece was built in the order it was, written for non-technical readers
+- Update post-commit hook to append structured stubs to STORY.md on every
+  commit in addition to BUILD_LOG.md
+- Update ARCHITECTURE.md repo structure to list all three doc files
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---
+
+### [2742948] 2026-06-25 02:41 — Add README, NEXT_STEPS, SQLite Viewer docs, and token-saving improvements
+**Files:** ARCHITECTURE.md,NEXT_STEPS.md,README.md,update_docs.py,
+
+Add README, NEXT_STEPS, SQLite Viewer docs, and token-saving improvements
+
+- README.md: guided start-here file linking PROBLEM → STORY → ARCHITECTURE → NEXT_STEPS
+- NEXT_STEPS.md: personal action list — immediate tasks, Phase 2 build instructions,
+  Phase 3 polling data sources, and prompts to use with Claude Code
+- ARCHITECTURE.md: add full SQLite Viewer install steps (extension ID, right-click flow),
+  add DB Browser option, add NEXT_STEPS and README to repo structure listing
+- update_docs.py: switch from claude-opus-4-8 to claude-sonnet-4-6 (doc synthesis
+  doesn't need Opus; Sonnet is ~5x cheaper and equally capable for this task)
+- post-commit hook: skip STORY.md entries for typo/formatting/style/whitespace commits;
+  keep refactoring and all feature/fix commits; BUILD_LOG still captures everything
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---
