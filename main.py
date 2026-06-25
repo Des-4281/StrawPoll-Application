@@ -33,7 +33,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="AI Congressional Vote Tracker", lifespan=lifespan)
+app = FastAPI(title="Strawpoll Voting App", lifespan=lifespan)
 
 
 # --- Request Schemas ---
