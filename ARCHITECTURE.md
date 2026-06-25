@@ -1,7 +1,7 @@
 # StrawPoll Voting App — Architecture & Build Guide
 
 **Last updated:** 2026-06-25
-**Maintainer:** Update this document whenever a new file is added, a data source changes, a schema column is added, or the roadmap progresses.
+**Maintainer:** This file is updated manually and by `python update_docs.py`. The post-commit hook writes to BUILD_LOG.md automatically on every commit. Run `update_docs.py` to synthesize BUILD_LOG into this file and check for discrepancies.
 
 ---
 
@@ -35,18 +35,23 @@ The app is backend-only right now (a REST API). A frontend (web or mobile) will 
 
 ```
 StrawPoll Application/
-├── main.py          — FastAPI app, API endpoints, AI agent loop
-├── models.py        — SQLAlchemy database schema (all tables)
-├── database.py      — DB engine setup, session factory, init_db()
-├── ai_tools.py      — Tool definitions Claude can call + their implementations
-├── services.py      — LegiScan API client (live bill lookups)
-├── seed_db.py       — One-time data import script (politicians + votes)
-├── tag_bills.py     — One-time tagging script (issue categories per bill)
-├── requirements.txt — Python dependencies
-├── .env             — API keys (never commit this file)
-├── .env.example     — Placeholder template for new developers
-├── .gitignore       — Protects .env, .claude/, *.db, venv/
-└── strawpoll.db     — SQLite database file (gitignored)
+├── main.py              — FastAPI app, API endpoints, AI agent loop
+├── models.py            — SQLAlchemy database schema (all tables)
+├── database.py          — DB engine setup, session factory, init_db()
+├── ai_tools.py          — Tool definitions Claude can call + their implementations
+├── services.py          — LegiScan API client (live bill lookups)
+├── seed_db.py           — One-time data import script (politicians + votes)
+├── tag_bills.py         — One-time tagging script (issue categories per bill)
+├── summarize_bills.py   — On-demand bill text fetcher + Claude summarizer
+├── update_docs.py       — On-demand ARCHITECTURE.md updater (reads BUILD_LOG, uses Claude)
+├── ARCHITECTURE.md      — This document — project explainer for humans and devs
+├── BUILD_LOG.md         — Auto-written after every git commit by the post-commit hook
+├── requirements.txt     — Python dependencies
+├── .env                 — API keys (never commit this file)
+├── .env.example         — Placeholder template for new developers
+├── .gitignore           — Protects .env, .claude/, *.db, venv/
+├── .git/hooks/post-commit — Shell hook that writes to BUILD_LOG.md on every commit
+└── strawpoll.db         — SQLite database file (gitignored)
 ```
 
 ---
@@ -64,7 +69,7 @@ One row per member of Congress. Primary key is the **bioguide_id** (a stable ID 
 | state | TEXT | Two-letter state code |
 | lis_member_id | TEXT | LIS ID — used to match Senate.gov XML votes to this row |
 
-**lis_member_id** is the key that links vote XML data to the politicians table. The Senate.gov vote XML uses LIS IDs, not bioguide IDs.
+**lis_member_id** is the key that links vote XML data to the politicians table. The Senate.gov vote XML uses LIS IDs, not bioguide IDs. This mismatch is why we store both: bioguide_id is the stable cross-system ID, lis_member_id is the one Senate.gov actually uses in its XML.
 
 ### `bills`
 One row per bill or procedural vote that was voted on. Primary key is a synthetic **bill_number** we construct.
@@ -80,6 +85,7 @@ One row per bill or procedural vote that was voted on. Primary key is a syntheti
 | tags | JSON | List of issue categories from our 22-category taxonomy |
 | bill_type | TEXT | "Bill", "Joint Resolution", "Resolution", or "Procedural" |
 | is_omnibus | BOOL | True if bill covers many unrelated topics (e.g. appropriations bills) |
+| ai_summary | TEXT | Claude-extracted structured summary (~800 words), populated by summarize_bills.py |
 | updated_at | DATETIME | Row last modified |
 
 **bill_number format:** We construct this as `{PREFIX}{NUMBER}-{CONGRESS}`. Examples:
@@ -157,35 +163,71 @@ Run once (or re-run to update). Does three things:
 4. **Bill numbers** are extracted from the vote's question text using regex. If no bill number is found (nomination votes, procedural motions), the bill_number is constructed as `PROC-{question_text}`.
 
 ```bash
-# Seed only 119th Congress Senate votes (default)
-python seed_db.py
-
-# Seed both 118th and 119th
-python seed_db.py --congress 118 119
-
-# Seed House too (after building House vote support)
-python seed_db.py --chamber both
+python seed_db.py                    # 119th Congress Senate (default)
+python seed_db.py --congress 118 119 # both congresses
+python seed_db.py --chamber both     # House too (future)
 ```
 
 ### Step 2: Tag bills (`tag_bills.py`)
 
 Run after seeding. Tags every bill with issue categories.
 
-1. **Congress.gov subjects API** (`api.congress.gov/v3/bill/{congress}/{type}/{number}/subjects`) — returns the official `policyArea` and `legislativeSubjects` for each bill, assigned by human catalogers.
-
-2. **Static mapping** — Congress.gov's ~40 policy areas and hundreds of subject terms are mapped to our 22 categories via two lookup tables in `tag_bills.py`: `POLICY_AREA_MAP` and `SUBJECT_KEYWORD_MAP`.
-
-3. **Claude fallback** — If Congress.gov returns no subjects (newer bills, edge cases), Claude reads the bill title and summary and assigns categories from our list.
-
-4. **bill_type** is detected from the bill number prefix: `S`/`HR` → Bill, `SJRES`/`HJRES` → Joint Resolution, `SRES`/`HRES`/`SCONRES`/`HCONRES` → Resolution, `PROC-` → Procedural.
-
-5. **is_omnibus** is set if the title contains keywords like "Omnibus", "Consolidated Appropriations", "Continuing Resolution" or if 6+ categories are assigned.
+1. **Congress.gov subjects API** — returns the official `policyArea` and `legislativeSubjects` for each bill, assigned by human catalogers at the Library of Congress.
+2. **Static mapping** — Congress.gov's ~40 policy areas and hundreds of subject terms are mapped to our 22 categories via lookup tables in `tag_bills.py`.
+3. **Claude fallback** — If Congress.gov returns no subjects, Claude reads the bill title and summary and assigns categories.
+4. **bill_type** detected from bill number prefix. **is_omnibus** set from title keywords or 6+ categories assigned.
 
 ```bash
 python tag_bills.py           # tag untagged bills
 python tag_bills.py --retag   # overwrite all tags
 python tag_bills.py --dry-run # preview without saving
 ```
+
+### Step 3: Summarize bills (`summarize_bills.py`)
+
+Optional but powerful. For each real bill (not procedural votes):
+
+1. Calls Congress.gov text endpoint to get the full bill text URL
+2. Downloads the actual text (plain text or HTML, strips tags)
+3. Sends up to 40,000 characters to Claude Opus 4.8
+4. Claude returns a structured ~800-word summary with sections: Plain English Summary, Key Provisions, Who It Affects, Fiscal Impact, Legal Basis, Political Context
+5. Stored in `bills.ai_summary` — one Claude call per bill, cached forever
+
+```bash
+python summarize_bills.py               # all unsummarized bills
+python summarize_bills.py --bill S5-119 # one specific bill
+python summarize_bills.py --limit 20    # test run
+```
+
+---
+
+## How Voting Scores Work (The Neutral Approach)
+
+This is a key design question: how do you score votes without imposing a political viewpoint?
+
+**The answer: describe what they voted FOR, not whether it was right or wrong.**
+
+Instead of labeling votes "progressive" or "conservative," each bill gets a plain-English description of what a Yea vote meant in concrete policy terms. For example:
+
+| Bill | Issue Tag | Yea vote meant... |
+|---|---|---|
+| S1234 | Healthcare | Funding $50B for Medicaid expansion |
+| S567 | Immigration | Authorizing construction of 500 miles of border barrier |
+| SJRES82 | Elections | Overturning the FEC's updated campaign finance rule |
+
+This framing is factual and neutral. Whether funding Medicaid is good or bad is for the user to decide. The app just tells you: Senator X voted for it, here's what "it" actually does.
+
+**How the scoring will work:**
+
+For each senator, for each issue category:
+- Find all bills tagged with that category they voted on
+- For each bill, store a `yea_action` description (what a Yea vote did)
+- Count: how many times did they vote to expand/fund vs. restrict/cut in that issue area?
+- Present it as a factual record: "Voted for increased military spending 12 of 14 times" — not a score
+
+**The resolution/nomination caveat:** Resolutions (SRES) often congratulate things or express the Senate's sense on an issue — they don't change law. These need to be weighted less or displayed separately so they don't distort the record. The `bill_type` field handles this.
+
+**You're right that nobody "votes for inflation"** — votes are always FOR something specific (a bill, an amendment, a nominee). The scoring system surfaces what they actually supported in concrete terms, never reframes it as a position on an abstraction like inflation or crime.
 
 ---
 
@@ -208,7 +250,27 @@ The user sends a natural language question like "How did Senator Murkowski vote 
 | `search_politician_votes` | Queries the SQLite DB for a politician's votes, optionally filtered by bill tag or date range |
 | `lookup_bill` | Calls LegiScan API to get live bill details (full title, status, sponsor, summary) |
 
-**Why this pattern:** Claude with tool use is more reliable than prompt-engineering a SQL query directly. The AI can handle ambiguous politician names, multi-step questions, and knowing when it needs more data before answering.
+**Why this pattern:** Claude with tool use is more reliable than prompt-engineering a SQL query directly. The AI handles ambiguous politician names, multi-step questions, and knowing when it needs more data.
+
+---
+
+## The Documentation System (How This File Stays Current)
+
+Two separate mechanisms, intentionally split so you control cost:
+
+### 1. Free auto-logging (every commit)
+The `.git/hooks/post-commit` shell script fires automatically after every `git commit`. It appends a structured entry to `BUILD_LOG.md` containing the commit hash, timestamp, author, files changed, and commit message. Zero AI, zero tokens. This always runs — you never have to think about it.
+
+### 2. On-demand synthesis (`update_docs.py`)
+Run manually when you want this ARCHITECTURE.md to catch up to recent changes:
+
+```bash
+python update_docs.py
+```
+
+This sends `BUILD_LOG.md` + all source files to Claude, which rewrites ARCHITECTURE.md with updates applied and flags any discrepancies between what the docs say and what the code actually does. Costs tokens, so you run it intentionally — not after every commit.
+
+**When to run it:** After a batch of related commits wraps up a feature. Not after every single commit.
 
 ---
 
@@ -282,35 +344,11 @@ uvicorn main:app --reload --port 8001
 **Command line:**
 ```bash
 sqlite3 strawpoll.db
-.tables                                  # list all tables
-SELECT COUNT(*) FROM votes;              # 54,960 vote records
-SELECT COUNT(*) FROM bills;             # 532 bills/procedural votes
+.tables
+SELECT COUNT(*) FROM votes;
 SELECT * FROM bills WHERE bill_type = 'Bill' LIMIT 10;
 SELECT name, state, party FROM politicians WHERE chamber = 'Senate';
 ```
-
----
-
-## Bill Text — Recommended Approach
-
-**Don't store raw bill text.** Store an AI-extracted structured summary instead.
-
-Why: The raw XML text of a congressional bill is 10-200KB each. You don't need the legal boilerplate — you need the policy substance. Claude can read the full text once and extract a 800-word structured summary covering:
-- What the bill does in plain English
-- Who it affects (agencies, industries, individuals)
-- Estimated fiscal impact
-- Key legal authorities it invokes
-- Provisions that would change existing law
-
-**Implementation plan (not built yet):**
-1. Add `ai_summary TEXT` column to the `bills` table
-2. On demand (when a user asks about a bill), fetch full text from Congress.gov XML endpoint: `api.congress.gov/v3/bill/{congress}/{type}/{num}/text`
-3. Pass to Claude, store the structured summary in `ai_summary`
-4. Subsequent questions about the same bill use the cached summary — one Claude call per bill ever
-
-Total storage for all bills: ~10MB. You don't need a TB drive for this.
-
-**If you ever want semantic search** (find bills similar to a topic): add a `embedding BLOB` column and store the 1536-float vector from an embedding model. That's ~6KB per bill, or ~5MB for all bills — still tiny.
 
 ---
 
@@ -321,48 +359,50 @@ Total storage for all bills: ~10MB. You don't need a TB drive for this.
 | politicians | 537 | All current members of Congress (House + Senate) |
 | bills | 532 | 119th Congress Senate roll call votes |
 | votes | 54,960 | Individual senator position per vote |
-| bills (by type) | 416 Procedural, 76 Joint Resolutions, 27 Bills, 13 Resolutions | Procedural = nomination/cloture votes |
+| bills by type | 416 Procedural, 76 Joint Resolutions, 27 Bills, 13 Resolutions | |
+| tagged (non-procedural) | 116 of 116 | All real bills have issue category tags |
 
 ---
 
 ## Roadmap
 
-### Phase 1 — Data Foundation (current)
+### Phase 1 — Data Foundation
 - [x] Politician roster (House + Senate, 119th Congress)
 - [x] Senate roll call votes (119th Congress, all 532 votes)
-- [x] Bill tagging system (22 issue categories)
+- [x] Bill tagging system (22 issue categories, all 116 real bills tagged)
 - [x] AI chat endpoint (natural language vote queries)
-- [ ] **Run `python tag_bills.py`** (without --dry-run) to save tags to DB
+- [x] Bill text summarizer (summarize_bills.py — on-demand, Claude extracts structured summary)
+- [x] Auto-documentation system (BUILD_LOG.md hook + update_docs.py)
 - [ ] Seed 118th Congress data for historical comparison
 
 ### Phase 2 — Scoring & Analysis
-- [ ] **Voting record score per senator per issue** — for each of the 22 categories, calculate what % of a senator's votes aligned with the progressive/conservative position. This is the core metric.
-- [ ] **Vote direction classification** — for each bill+issue, determine which vote position (Yea/Nay) is the "progressive" position. Requires human curation or Claude classification.
-- [ ] **AI bill summary** — fetch Congress.gov bill text, extract structured summary with Claude, store in `bills.ai_summary`
+- [ ] **`yea_action` field on bills** — one sentence describing what a Yea vote concretely did (e.g. "funded $50B for Medicaid expansion"). Claude classifies this from the bill summary. Neutral, factual, no political framing.
+- [ ] **Voting record display per senator per issue** — for each category, list all bills they voted on, what each Yea/Nay meant, and a plain-English summary of their record (e.g. "Voted to increase defense spending in 12 of 14 votes on Military & Defense bills")
+- [ ] **Score weighting** — weight Bills more than Resolutions (Resolutions don't change law), weight omnibus bills appropriately given they cover many topics
 
 ### Phase 3 — Polling Integration
-- [ ] **State-level polling data** — find and import approval ratings / issue polling by state. Best sources: FiveThirtyEight averages, Pew Research state-level data, YouGov MRP state estimates.
-- [ ] **Polling vs. voting gap** — for each senator × each issue: compare their voting score to their state's polling sentiment on that issue. A large gap is the most politically interesting signal.
-- [ ] **StatePolling table** — add to schema: state, issue_category, polling_pct, poll_date, source
+- [ ] **State-level polling data** — approval ratings / issue polling by state. Best sources: FiveThirtyEight averages, Pew Research state-level data, YouGov MRP state estimates.
+- [ ] **Polling vs. voting gap** — for each senator × each issue: compare their voting record to their state's polling sentiment on that issue. A large gap is the politically interesting signal.
+- [ ] **StatePolling table** — state, issue_category, polling_pct, poll_date, source
 
 ### Phase 4 — API Expansion
-- [ ] `GET /senators/{state}` — all senators for a state with their voting scores
-- [ ] `GET /senator/{bioguide_id}/scores` — issue-by-issue voting record scores
-- [ ] `GET /compare/{state}` — senator voting scores vs. state polling on same issues
+- [ ] `GET /senators/{state}` — all senators for a state with their voting record
+- [ ] `GET /senator/{bioguide_id}/record` — full issue-by-issue voting record
+- [ ] `GET /compare/{state}` — senator voting vs. state polling on same issues
 - [ ] `GET /bills` — paginated bill list with filtering by tag, type, congress
 
 ### Phase 5 — Frontend
 - [ ] Web app (React/Next.js or similar)
-- [ ] State map view — click a state, see senators + their alignment scores
-- [ ] Senator profile page — voting record broken down by issue with key votes highlighted
-- [ ] AI chat interface — conversational access to all data
-- [ ] Bill explorer — browse and search bills by issue tag
+- [ ] State map — click a state, see senators + their records
+- [ ] Senator profile — voting record by issue with key votes highlighted
+- [ ] AI chat interface
+- [ ] Bill explorer — browse by issue tag
 
 ### Phase 6 — Scale
 - [ ] Migrate SQLite → PostgreSQL (one-line change in DATABASE_URL)
-- [ ] Add House votes (currently excluded because House districts don't map cleanly to state polling)
+- [ ] Add House votes (excluded now because House districts don't map cleanly to state polling)
 - [ ] Historical data: 117th, 116th Congress for trend analysis
-- [ ] Scheduled data refresh (nightly cron to pull new votes from Senate.gov)
+- [ ] Nightly data refresh (new votes auto-pulled from Senate.gov)
 
 ---
 
@@ -370,8 +410,8 @@ Total storage for all bills: ~10MB. You don't need a TB drive for this.
 
 | Source | What it provides | API key needed | Notes |
 |---|---|---|---|
-| `unitedstates.github.io/congress-legislators` | Politician roster (name, party, state, IDs) | No | Updated by volunteer+congressional staff |
-| `www.senate.gov` XML feeds | 119th Congress roll call votes (official) | No | `vote_menu_{congress}_{session}.xml` index |
+| `unitedstates.github.io/congress-legislators` | Politician roster | No | Volunteer + congressional staff maintained |
+| `www.senate.gov` XML feeds | 119th Congress roll call votes | No | Official source |
 | `theunitedstates.io` | 118th Congress and older bulk vote data | No | Hasn't published 119th yet |
 | LegiScan API | Bill search, details, status, sponsors | Yes (free) | Better search than Congress.gov |
 | Congress.gov API | Bill subject tags, full bill text | Yes (free) | Official; subject tags are human-assigned |
