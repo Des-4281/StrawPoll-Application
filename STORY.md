@@ -434,3 +434,19 @@ casing fix for candidates that got a bad URL on the first pass
 > *Run `python update_docs.py` to expand this into a narrative entry.*
 
 ---
+
+### [9eef0ee] 2026-06-25 03:31 — Fix FEC URL casing bug and add --refresh reminder to NEXT_STEPS -- FInished First round of Candidate Seeding
+**Files:** BUILD_LOG.md,COMMIT STEPS ,STORY.md,seed_output.log,
+
+Fix FEC URL casing bug and add --refresh reminder to NEXT_STEPS -- FInished First round of Candidate Seeding
+
+seed_candidates.py: lowercase URL before prepending https:// so FEC entries
+like "HTTPS://WWW.SITE.COM" don't become "https://HTTPS://..." — also
+normalizes all-caps domains for candidate urls like "HICKENLOOPER.COM" to lowercase
+
+NEXT_STEPS.md: added step 3 — run --refresh once to pick up the URL
+casing fix for candidates that got a bad URL on the first pass
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---

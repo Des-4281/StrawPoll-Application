@@ -215,12 +215,12 @@ NEXT_STEPS.md — added manual SQL snippet for updating primary nominees after e
 GOAL.md — reformatted for readability (content unchanged).
 ---
 
-## [d659e83] 2026-06-25 03:30 — David Solorio
-**Hash:** d659e8377778a9876107177aa82016bfe2538191
-**Files:** NEXT_STEPS.md,seed_candidates.py,
+## [a44561b] 2026-06-25 03:30 — David Solorio
+**Hash:** a44561b (reworded from d659e83 via rebase)
+**Files:** NEXT_STEPS.md, seed_candidates.py
 **Lines:** +10 / -2
 
-Fix FEC URL casing bug and add --refresh reminder to NEXT_STEPS
+Fix FEC URL casing bug, normalize all-caps FEC URLs to lowercase
 
 seed_candidates.py: lowercase URL before prepending https:// so FEC entries
 like "HTTPS://WWW.SITE.COM" don't become "https://HTTPS://..." — also
@@ -228,4 +228,17 @@ normalizes all-caps domains like "HICKENLOOPER.COM" to lowercase
 
 NEXT_STEPS.md: added step 3 — run --refresh once to pick up the URL
 casing fix for candidates that got a bad URL on the first pass
+---
+
+## [be1e4c1] 2026-06-25 03:31 — David Solorio
+**Hash:** be1e4c1 (reworded from 9eef0ee via rebase)
+**Files:** BUILD_LOG.md, STORY.md, seed_output.log
+**Lines:** +1615 / -0
+
+Complete first candidate seed run — 273 saved, 64 with positions
+
+First full run of seed_candidates.py with the website URL fix applied.
+Results: 273 candidates saved, 125 with websites found in FEC records,
+64 with issue positions extracted by Claude from campaign websites,
+209 flagged needs_update=True for follow-up data collection.
 ---
