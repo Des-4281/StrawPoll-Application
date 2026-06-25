@@ -118,7 +118,7 @@ async def summarize_with_claude(bill_number: str, title: str, text: str) -> str 
     Extract a structured summary from the full bill text using Claude.
     Returns a ~800-word structured summary, or None on failure.
     """
-    prompt = f"""You are reading the full text of a US congressional bill and extracting a structured summary.
+    prompt = f"""You are reading the full text of a US congressional bill and extracting a structured summary for a political transparency app. Your job is to surface both the headline purpose AND the fine print that voters typically miss.
 
 Bill: {bill_number}
 Title: {title or "Unknown"}
@@ -126,31 +126,42 @@ Title: {title or "Unknown"}
 Full text (may be truncated):
 {text}
 
-Write a structured summary with these exact sections. Be specific — name the programs, dollar amounts, agencies, and legal authorities actually in the bill. Do not generalize.
+Write a structured summary with these exact sections. Be specific — name the actual programs, dollar amounts, agencies, companies, districts, countries, and legal authorities in the bill. Do not generalize or paraphrase vaguely.
 
 ## Plain English Summary
-2-3 sentences explaining what this bill does and why it was introduced.
+2-3 sentences: what does this bill do and why was it introduced?
 
 ## Key Provisions
-Bullet list of the 4-8 most important things the bill actually does or changes.
+Bullet list of the 4-8 most important things the bill actually does or changes in law. Lead with the main purpose, but include secondary provisions too.
+
+## Hidden or Overlooked Provisions
+This is critical: list any provisions buried in the bill that are not obvious from the title or main purpose. Include:
+- Earmarks or funding directed to specific states, congressional districts, cities, or localities
+- Benefits, contracts, or regulatory carve-outs for specific named companies or industries
+- Foreign aid, loan guarantees, or advantages granted to specific countries or foreign entities
+- Subsidy programs for specific agricultural products, sectors, or business types (e.g. dairy, ethanol, oil)
+- Riders — provisions unrelated to the bill's stated topic that were attached to get it passed
+- Liability shields or legal protections granted to specific industries or entities
+- Sunset clauses, delayed implementation dates, or phase-in provisions that reduce the bill's apparent scope
+If none found, write "None identified."
 
 ## Who It Affects
-Which Americans, industries, agencies, or groups are directly impacted.
+Which Americans, industries, companies, or groups benefit — and who bears the cost or is negatively impacted.
 
 ## Fiscal Impact
-Estimated cost or savings. If the bill has a CBO score or states its own funding levels, use those numbers. If unknown, say so.
+Estimated cost or savings. Use CBO score numbers if referenced. Break out any specific dollar amounts named in the bill for specific recipients.
 
 ## Legal Basis
-What existing laws this amends, what agencies are given new authority, any constitutional questions raised.
+What existing laws this amends, what agencies are given new authority, any constitutional or legal questions raised.
 
 ## Political Context
-One sentence on why this was controversial or bipartisan (if known from the title/text).
+One sentence on why this was controversial, who opposed it, or why it was bipartisan.
 """
 
     try:
         response = claude.messages.create(
             model="claude-opus-4-8",
-            max_tokens=1200,
+            max_tokens=2000,
             messages=[{"role": "user", "content": prompt}],
         )
         return response.content[0].text.strip()

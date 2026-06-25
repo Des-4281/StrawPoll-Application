@@ -166,7 +166,7 @@ class Bill(Base):
     # AI-extracted structured summary (populated on-demand by summarize_bill.py).
     # Stores ~800 words covering key provisions, who it affects, fiscal impact, legal basis.
     # Fetched once from Congress.gov full text, then cached here — never fetched again.
-    ai_summary: Mapped[str | None] = mapped_column(String(4000))
+    ai_summary: Mapped[str | None] = mapped_column(String(8000))
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
