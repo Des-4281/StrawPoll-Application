@@ -196,8 +196,7 @@ class Vote(Base):
 
 # --- Candidate Tables ---
 # Candidates running for office in upcoming elections.
-# Populated by seed_candidates.py, which scrapes Ballotpedia for race/candidate data
-# and uses Claude to normalize stated positions into our 22-category taxonomy.
+# Populated by seed_candidates.py using the FEC API (official federal source).
 
 class Candidate(Base):
     __tablename__ = "candidates"
@@ -210,6 +209,17 @@ class Candidate(Base):
     office: Mapped[str] = mapped_column(String(20), nullable=False)  # "Senate" / "House"
     incumbent: Mapped[bool] = mapped_column(default=False, nullable=False)
 
+    # Race status — updated by seed_candidates.py --check-status
+    # "declared"  — actively running (FEC shows active, no withdrawal signals)
+    # "suspended" — campaign paused (language on website or FEC inactive flag)
+    # "withdrawn" — formally dropped out (FEC inactive + website confirms)
+    # "primary_winner" / "primary_loser" — set after primary results
+    race_status: Mapped[str] = mapped_column(String(30), default="declared", nullable=False, index=True)
+    race_status_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    # FEC candidate ID — e.g. "S8GA00180" — lets us re-query FEC for updates
+    fec_candidate_id: Mapped[str | None] = mapped_column(String(20), index=True)
+
     # If they're a sitting senator, link to their voting record
     bioguide_id: Mapped[str | None] = mapped_column(
         String(10), ForeignKey("politicians.bioguide_id"), nullable=True, index=True
@@ -220,10 +230,7 @@ class Candidate(Base):
 
     # Stated positions mapped to our 22-category taxonomy.
     # Format: {"Healthcare": "Supports expanding Medicaid", "Immigration": "Opposes amnesty"}
-    # Values are neutral factual descriptions of what the candidate says they support/oppose.
     positions: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
-
-    # Where the position data came from: "ballotpedia", "website", "claude-inference"
     positions_source: Mapped[str | None] = mapped_column(String(100))
     positions_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 

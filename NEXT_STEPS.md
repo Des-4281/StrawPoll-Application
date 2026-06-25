@@ -28,27 +28,21 @@ Run this after a batch of related commits — not after every single one. It rew
 Open VS Code → Extensions (⌘⇧X) → search **SQLite Viewer** → install the one by **Florian Klampfer**.
 Then right-click `strawpoll.db` → Open With → SQLite Viewer to browse your data.
 
-### 2. Get a free FEC API key
-The FEC (Federal Election Commission) is the official source for candidate data. Without a real key you're limited to 60 requests/hour (DEMO_KEY), which is too slow for the full candidate list.
+### 2. ✅ FEC API key — Done
+You have a real key in `.env` (`FEC_API_KEY`). The full candidate seed is running now.
 
-1. Go to: **https://api.data.gov/signup/**
-2. Enter your email — the key arrives instantly
-3. Add it to your `.env` file: `FEC_API_KEY=your-key-here`
-
-Then seed 2026 Senate candidates:
+**To check race status weekly:**
 ```bash
-python seed_candidates.py --dry-run        # see what will be imported (no API cost)
-python seed_candidates.py --state GA       # test with one state first
-python seed_candidates.py                  # all ~270 D/R funded candidates
+python seed_candidates.py --check-status   # re-checks who is still in the race
 ```
+This checks FEC's inactive flag and scans campaign websites for withdrawal language. Run it weekly during campaign season to keep `race_status` current.
 
 ### 3. Push the latest commits to GitHub
 ```bash
 git push
 ```
-You have 5 unpushed commits with the tagging system, bill summarizer, and all the documentation files.
 
-### 3. Test the chat endpoint with a real question
+### 5. Test the chat endpoint with a real question
 The server needs to be running first:
 ```bash
 source venv/bin/activate
@@ -67,7 +61,7 @@ curl -X POST http://localhost:8001/chat \
   -d '{"user_id": 1, "message": "How did Bernie Sanders vote on military defense bills?"}'
 ```
 
-### 4. Try a bill summary to verify it works
+### 6. Try a bill summary to verify it works
 ```bash
 python summarize_bills.py --limit 3
 ```
@@ -77,14 +71,7 @@ This will fetch 3 bills from Congress.gov, extract a plain-English summary inclu
 
 ## This Week
 
-### 5. Push code to GitHub if you haven't already
-Make sure `.env` is NOT in the push (it's gitignored, but confirm).
-```bash
-git status  # .env should not appear here
-git push
-```
-
-### 6. Decide: run full bill summarization now or later?
+### 7. Decide: run full bill summarization now or later?
 Running `python summarize_bills.py` on all 116 real bills will:
 - Make ~116 calls to Congress.gov (free, but some bills may have no text yet)
 - Make ~116 Claude API calls (each costs about $0.01-0.03 at Opus 4.8 rates)
@@ -93,7 +80,7 @@ Running `python summarize_bills.py` on all 116 real bills will:
 
 You don't have to do this now — summaries are generated on demand. But doing it in one batch means the AI chat can immediately reference bill summaries without any delay.
 
-### 7. Run `python update_docs.py` after your next batch of changes
+### 8. Run `python update_docs.py` after your next batch of changes
 Once you've made a few more commits, run this to have Claude synthesize BUILD_LOG.md into updated narrative entries in STORY.md and ARCHITECTURE.md.
 ```bash
 python update_docs.py

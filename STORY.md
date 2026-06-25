@@ -254,3 +254,71 @@ FEC's DEMO_KEY allows 60 requests per hour — too slow for 273 candidates. The 
 FEC stores names as "LAST, FIRST MIDDLE" in all caps. Some entries put a middle initial before the actual first name (e.g. "OSSOFF, T. JON" instead of "OSSOFF, JON T"). We built a name formatter that detects and skips single-character initials.
 
 ---
+
+### Step 10 — Tracking Who's Still in the Race (`race_status`, `fec_candidate_id`, `--check-status`)
+
+**The problem:** After we seed candidates, the race doesn't stand still. People drop out, suspend their campaigns, lose primaries. If we don't track this, the app will show users candidates who are no longer running — which is confusing and potentially misleading.
+
+We needed a way to:
+1. Store the current status of each candidate's campaign
+2. Update it automatically without requiring manual research
+
+**What we added to the `candidates` table:**
+- `race_status` — a string field: "declared", "suspended", "withdrawn", "primary_winner", or "primary_loser"
+- `race_status_updated_at` — timestamp of the last status check
+- `fec_candidate_id` — the FEC's unique ID for this candidate (e.g. "S8GA00180"), stored so we can re-query FEC directly for updates
+
+The first two were a schema migration on an existing table using `ALTER TABLE ADD COLUMN`, since SQLite supports adding columns with a default value.
+
+**How status is determined:**
+Two signals, checked in order:
+
+1. **FEC `candidate_inactive` flag** — when a candidate formally files to terminate their campaign with the FEC, this flag flips to true. It's the most reliable signal that a campaign is legally over.
+
+2. **Website keyword scan** — campaigns often stop operating before they file termination paperwork. We scan the campaign website for phrases like "suspending my campaign", "no longer a candidate", "dropped out" — and flag these as withdrawn or suspended accordingly. This catches real-world campaign endings that FEC data misses by weeks or months.
+
+**The `--check-status` mode:**
+Running `python seed_candidates.py --check-status` re-checks every declared candidate. It's fast (FEC API + one HTTP fetch per candidate) and costs nothing in AI tokens — the keyword scan doesn't need Claude.
+
+**The design choice on keyword matching vs. Claude:**
+Claude would be more accurate at detecting nuanced language (e.g. "I have decided the time is not right for my campaign"). But running Claude for 273 candidates on a weekly basis would cost $5-10 per run in API tokens. A keyword list handles 90% of cases for free, and the FEC flag catches the rest with official certainty. Claude is reserved for extraction tasks (positions), not for pattern matching on known phrases.
+
+---
+
+### [e68b032] 2026-06-25 02:55 — Add 2026 Senate candidate tracking — FEC data + Claude position extraction
+**Files:** .env.example,ARCHITECTURE.md,BUILD_LOG.md,NEXT_STEPS.md,STORY.md,models.py,seed_candidates.py,
+
+Add 2026 Senate candidate tracking — FEC data + Claude position extraction
+
+New table: candidates
+- Stores every 2026 Senate candidate who has raised funds (309 D/R from FEC)
+- Tracks name, state, party, incumbency, website URL, stated positions
+- Links incumbents to their voting record via bioguide_id FK to politicians table
+
+New script: seed_candidates.py
+- Pulls candidate list from FEC API (official federal source, free JSON API)
+- Fetches campaign website URL from FEC committee records
+- Downloads each campaign website, strips HTML, sends to Claude Sonnet 4.6
+- Claude extracts stated positions and maps to our 22 issue categories
+- Saves neutral factual descriptions ("Supports X", "Opposes Y") — no spin
+- Handles FEC rate limits with configurable delay (DEMO_KEY vs real key)
+- Name formatter handles FEC "LAST, FIRST MIDDLE" format including initial-first quirk
+
+Why FEC not Ballotpedia: Ballotpedia blocks all API and HTTP access (returns
+202 empty). FEC is the official government source — free, structured, complete.
+
+Requires free FEC API key from api.data.gov/signup — add as FEC_API_KEY in .env.
+Without it DEMO_KEY works but is limited to 60 req/hour (too slow for full run).
+
+Usage:
+  python seed_candidates.py --dry-run      # preview
+  python seed_candidates.py --state GA     # one state
+  python seed_candidates.py                # all funded D/R candidates
+
+Updated: ARCHITECTURE.md (candidates schema, new data source, setup step),
+NEXT_STEPS.md (FEC key instructions), STORY.md (narrative for this step),
+.env.example (FEC_API_KEY placeholder)
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---

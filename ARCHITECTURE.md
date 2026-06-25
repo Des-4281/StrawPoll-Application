@@ -136,6 +136,9 @@ One row per person running for office in an upcoming election. Populated by `see
 | election_year | INT | 2026 |
 | office | TEXT | "Senate" (House added later) |
 | incumbent | BOOL | True if they currently hold the seat |
+| race_status | TEXT | "declared", "suspended", "withdrawn", "primary_winner", "primary_loser" |
+| race_status_updated_at | DATETIME | When race_status was last checked |
+| fec_candidate_id | TEXT | FEC candidate ID (e.g. `S8GA00180`) — used to re-query FEC for updates |
 | bioguide_id | TEXT FK | → politicians.bioguide_id, if they're a sitting senator |
 | website_url | TEXT | Campaign website URL (from FEC committee record) |
 | ballotpedia_url | TEXT | Constructed Ballotpedia link for reference |
@@ -143,7 +146,17 @@ One row per person running for office in an upcoming election. Populated by `see
 | positions_source | TEXT | Where positions came from: "campaign website", "fec-no-website", etc. |
 | positions_updated_at | DATETIME | When positions were last fetched |
 
-**Why this matters:** Incumbents have a voting record (in the `votes` table) AND stated positions (in `candidates.positions`). Challengers only have stated positions. The comparison between what incumbents *say* and how they *vote* is a key feature.
+**race_status values:**
+- `declared` — actively running (FEC shows active, no withdrawal signals on website)
+- `suspended` — campaign paused (website signals pause language; may resume)
+- `withdrawn` — formally dropped out (FEC inactive flag or clear withdrawal language on site)
+- `primary_winner` / `primary_loser` — set after primary results are certified
+
+**How race_status is determined** (`seed_candidates.py --check-status`):
+1. FEC `candidate_inactive` flag — most reliable signal a campaign formally ended
+2. Keyword scan of campaign website for withdrawal/suspension language ("suspending my campaign", "no longer a candidate", etc.) — catches campaigns that stepped back without filing FEC termination paperwork
+
+**Why this matters:** Incumbents have a voting record (in the `votes` table) AND stated positions (in `candidates.positions`). Challengers only have stated positions. The comparison between what incumbents *say* and how they *vote* is a key feature for Phase 2.
 
 ### `users`, `user_favorites`, `chat_sessions`
 App user tables. Users sign up with email, can save favorite politicians/bills, and have chat history with the AI stored as a JSON message list per session.
@@ -209,7 +222,27 @@ python tag_bills.py --retag   # overwrite all tags
 python tag_bills.py --dry-run # preview without saving
 ```
 
-### Step 3: Summarize bills (`summarize_bills.py`)
+### Step 3: Seed 2026 candidates (`seed_candidates.py`)
+
+Imports all 2026 Senate candidates from FEC, fetches their campaign websites, and uses Claude to extract stated positions.
+
+```bash
+python seed_candidates.py --dry-run        # preview without saving
+python seed_candidates.py --state GA       # one state only (for testing)
+python seed_candidates.py                  # all funded D/R candidates (~273)
+python seed_candidates.py --refresh        # re-fetch positions for existing rows
+python seed_candidates.py --check-status   # re-check who is still in the race
+python seed_candidates.py --check-status --state GA  # check one state only
+```
+
+**What `--check-status` does:** For every candidate whose `race_status` is "declared", it:
+1. Hits FEC's `/candidate/{id}/` endpoint and checks the `candidate_inactive` flag
+2. Fetches the candidate's campaign website and scans for withdrawal/suspension language
+3. Updates `race_status` and `race_status_updated_at` if a change is detected
+
+Run this weekly during active campaign season to catch candidates who drop out.
+
+### Step 4: Summarize bills (`summarize_bills.py`)
 
 Optional but powerful. For each real bill (not procedural votes):
 
@@ -413,6 +446,7 @@ SELECT bill_number, tags FROM bills WHERE tags != '[]' LIMIT 5;
 - [x] AI chat endpoint (natural language vote queries)
 - [x] Bill text summarizer (summarize_bills.py — on-demand, Claude extracts structured summary)
 - [x] Auto-documentation system (BUILD_LOG.md hook + update_docs.py)
+- [x] 2026 Senate candidate tracking (FEC data + Claude position extraction + race status)
 - [ ] Seed 118th Congress data for historical comparison
 
 ### Phase 2 — Scoring & Analysis

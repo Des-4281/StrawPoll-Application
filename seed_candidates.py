@@ -34,6 +34,8 @@ Usage:
   python seed_candidates.py --dry-run           # list candidates without fetching positions
   python seed_candidates.py --refresh           # re-fetch positions for existing rows
   python seed_candidates.py --all-parties       # include third-party candidates too
+  python seed_candidates.py --check-status      # re-check who is still in the race
+  python seed_candidates.py --check-status --state GA   # check one state only
 """
 
 import asyncio
@@ -296,17 +298,20 @@ async def seed_candidates(
 
         for i, fec_data in enumerate(candidates):
             candidate_id = fec_data["candidate_id"]
-            raw_name = fec_data["name"]  # FEC stores as "LAST, FIRST MIDDLE"
+            raw_name = fec_data["name"]
             name = _format_name(raw_name)
             state = fec_data["state"]
             party_full = fec_data.get("party_full", "").title()
             incumbent = fec_data.get("incumbent_challenge", "") == "I"
+            # FEC marks withdrawn/inactive candidates — use as first status signal
+            fec_inactive = fec_data.get("candidate_inactive", False)
+            race_status = "withdrawn" if fec_inactive else "declared"
 
-            log.info("[%d/%d] %s — %s (%s) %s",
+            log.info("[%d/%d] %s — %s (%s)%s%s",
                      i + 1, len(candidates), state, name, party_full,
-                     "INCUMBENT" if incumbent else "")
+                     " INCUMBENT" if incumbent else "",
+                     " [FEC INACTIVE]" if fec_inactive else "")
 
-            # Check if already in DB
             async with AsyncSessionLocal() as db:
                 existing = await db.execute(
                     select(Candidate).where(
@@ -322,8 +327,6 @@ async def seed_candidates(
                 skipped += 1
                 continue
 
-            # Step 2: Get campaign website from FEC committee
-            # DEMO_KEY: ~60 req/hour. Real key: ~1000/hour (get one free at api.data.gov/signup)
             delay = 1.5 if FEC_API_KEY == "DEMO_KEY" else 0.3
             await asyncio.sleep(delay)
             website_url = await fetch_candidate_website(client, candidate_id)
@@ -332,14 +335,20 @@ async def seed_candidates(
             positions = {}
             positions_source = "fec-no-website"
 
-            # Step 3: Fetch and parse campaign website
             if website_url:
                 website_text = await fetch_website_text(client, website_url)
                 if website_text:
-                    positions, positions_source = extract_positions_from_website(
-                        website_text, name, state, party_full
-                    )
-                    log.info("  Positions found: %d categories", len(positions))
+                    # Check for withdrawal language before extracting positions
+                    withdrawal_status = _check_website_for_withdrawal(website_text)
+                    if withdrawal_status:
+                        race_status = withdrawal_status
+                        log.info("  Status update from website: %s", race_status)
+
+                    if race_status == "declared":
+                        positions, positions_source = extract_positions_from_website(
+                            website_text, name, state, party_full
+                        )
+                        log.info("  Positions found: %d categories", len(positions))
                 else:
                     log.info("  Website unreachable")
                     no_website += 1
@@ -350,7 +359,6 @@ async def seed_candidates(
             if not positions:
                 no_positions += 1
 
-            # Step 4: Link to voting record if they're a sitting senator
             bioguide_id = None
             if incumbent:
                 async with AsyncSessionLocal() as db:
@@ -366,12 +374,14 @@ async def seed_candidates(
                         bioguide_id = matches[0].bioguide_id
                         log.info("  Linked to voting record: %s", bioguide_id)
 
-            # Step 5: Save to database
             async with AsyncSessionLocal() as db:
                 if existing_row:
                     row = await db.get(Candidate, existing_row.id)
                     row.party = party_full
                     row.incumbent = incumbent
+                    row.fec_candidate_id = candidate_id
+                    row.race_status = race_status
+                    row.race_status_updated_at = datetime.now(timezone.utc)
                     row.website_url = website_url
                     row.positions = positions
                     row.positions_source = positions_source
@@ -386,6 +396,9 @@ async def seed_candidates(
                         election_year=2026,
                         office="Senate",
                         incumbent=incumbent,
+                        fec_candidate_id=candidate_id,
+                        race_status=race_status,
+                        race_status_updated_at=datetime.now(timezone.utc),
                         bioguide_id=bioguide_id,
                         website_url=website_url,
                         ballotpedia_url=f"https://ballotpedia.org/{name.replace(' ', '_')}",
@@ -399,9 +412,105 @@ async def seed_candidates(
             saved += 1
 
     log.info(
-        "\nDone. Saved: %d | Skipped (existing): %d | No website: %d | No positions extracted: %d",
+        "\nDone. Saved: %d | Skipped (existing): %d | No website: %d | No positions: %d",
         saved, skipped, no_website, no_positions,
     )
+
+
+async def check_candidate_status(filter_state: str | None = None) -> None:
+    """
+    Re-check race status for all declared candidates.
+    Signals checked (in order):
+      1. FEC candidate_inactive flag — most reliable signal a campaign is over
+      2. Website withdrawal/suspension language — catches campaigns that paused
+         without filing FEC termination paperwork
+
+    Run this periodically (weekly during active campaign season) to keep status current.
+    """
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    async with AsyncSessionLocal() as db:
+        stmt = select(Candidate).where(
+            Candidate.election_year == 2026,
+            Candidate.race_status == "declared",
+        )
+        if filter_state:
+            stmt = stmt.where(Candidate.state == filter_state.upper())
+        result = await db.execute(stmt)
+        candidates = result.scalars().all()
+
+    log.info("Checking status for %d declared candidates...", len(candidates))
+    updated = 0
+
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        for i, cand in enumerate(candidates):
+            log.info("[%d/%d] %s — %s", i + 1, len(candidates), cand.state, cand.name)
+
+            new_status = None
+
+            # Check FEC for inactive flag
+            if cand.fec_candidate_id:
+                await asyncio.sleep(0.3)
+                try:
+                    r = await client.get(
+                        f"{FEC_BASE}/candidate/{cand.fec_candidate_id}/",
+                        params={"api_key": FEC_API_KEY},
+                        timeout=15.0,
+                    )
+                    if r.status_code == 200:
+                        fec_result = r.json().get("results", [{}])[0]
+                        if fec_result.get("candidate_inactive"):
+                            new_status = "withdrawn"
+                            log.info("  FEC shows inactive → withdrawn")
+                except Exception as e:
+                    log.debug("FEC check failed: %s", e)
+
+            # Check website for withdrawal language if FEC didn't flag it
+            if not new_status and cand.website_url:
+                website_text = await fetch_website_text(client, cand.website_url)
+                if website_text:
+                    new_status = _check_website_for_withdrawal(website_text)
+                    if new_status:
+                        log.info("  Website signals: %s", new_status)
+
+            if new_status and new_status != cand.race_status:
+                async with AsyncSessionLocal() as db:
+                    row = await db.get(Candidate, cand.id)
+                    row.race_status = new_status
+                    row.race_status_updated_at = datetime.now(timezone.utc)
+                    await db.commit()
+                log.info("  Updated: %s → %s", cand.race_status, new_status)
+                updated += 1
+
+    log.info("Status check done. Updated: %d", updated)
+
+
+def _check_website_for_withdrawal(text: str) -> str | None:
+    """
+    Quick keyword scan of a campaign website for withdrawal or suspension language.
+    Returns "withdrawn", "suspended", or None if the candidate appears still active.
+    No Claude call needed — keyword matching is fast and accurate for this signal.
+    """
+    text_lower = text.lower()
+    withdrawn_signals = [
+        "suspended my campaign", "suspending my campaign",
+        "ended my campaign", "ending my campaign",
+        "withdraw from the race", "withdrawing from the race",
+        "no longer a candidate", "dropped out",
+        "have decided not to run",
+    ]
+    suspended_signals = [
+        "pausing my campaign", "paused my campaign",
+        "suspending operations", "on hold",
+    ]
+    for signal in withdrawn_signals:
+        if signal in text_lower:
+            return "withdrawn"
+    for signal in suspended_signals:
+        if signal in text_lower:
+            return "suspended"
+    return None
 
 
 def _format_name(fec_name: str) -> str:
@@ -443,12 +552,17 @@ if __name__ == "__main__":
                         help="Re-fetch positions for candidates already in DB")
     parser.add_argument("--all-parties", action="store_true", dest="all_parties",
                         help="Include third-party candidates (Libertarian, Green, etc.)")
+    parser.add_argument("--check-status", action="store_true", dest="check_status",
+                        help="Re-check FEC inactive flag + website for withdrawal/suspension language")
     args = parser.parse_args()
 
-    asyncio.run(seed_candidates(
-        filter_state=args.state,
-        limit=args.limit,
-        dry_run=args.dry_run,
-        refresh=args.refresh,
-        all_parties=args.all_parties,
-    ))
+    if args.check_status:
+        asyncio.run(check_candidate_status(filter_state=args.state))
+    else:
+        asyncio.run(seed_candidates(
+            filter_state=args.state,
+            limit=args.limit,
+            dry_run=args.dry_run,
+            refresh=args.refresh,
+            all_parties=args.all_parties,
+        ))
