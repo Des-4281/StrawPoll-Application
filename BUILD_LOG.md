@@ -242,3 +242,11 @@ Results: 273 candidates saved, 125 with websites found in FEC records,
 64 with issue positions extracted by Claude from campaign websites,
 209 flagged needs_update=True for follow-up data collection.
 ---
+
+## [d79c1db] 2026-06-25 04:00 — David Solorio
+**Hash:** d79c1db5ff080fafbc150d46ea4d750557fe443b
+**Files:** BUILD_LOG.md,STORY.md,
+**Lines:** +33 / -4
+
+Correct BUILD_LOG entries after commit rebase — update stale hashes and messages
+---

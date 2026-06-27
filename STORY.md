@@ -450,3 +450,12 @@ casing fix for candidates that got a bad URL on the first pass
 > *Run `python update_docs.py` to expand this into a narrative entry.*
 
 ---
+
+### [d79c1db] 2026-06-25 04:00 — Correct BUILD_LOG entries after commit rebase — update stale hashes and messages
+**Files:** BUILD_LOG.md,STORY.md,
+
+Correct BUILD_LOG entries after commit rebase — update stale hashes and messages
+
+> *Run `python update_docs.py` to expand this into a narrative entry.*
+
+---

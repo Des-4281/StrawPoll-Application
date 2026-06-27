@@ -4,24 +4,6 @@ This is your personal action list. In order of priority.
 
 ---
 
-## Every Time You Commit
-
-The post-commit hook runs automatically and logs everything to BUILD_LOG.md and STORY.md for free. After it runs, you'll see this in your terminal:
-
-```
-→ Logged commit abc1234 to BUILD_LOG.md
-→ STORY.md updated
-  (Optional: run 'python update_docs.py' to update docs with Claude)
-```
-
-**If you want to update the docs (optional, costs ~$0.30 in tokens):**
-```bash
-python update_docs.py
-```
-Run this after a batch of related commits — not after every single one. It rewrites ARCHITECTURE.md and STORY.md to reflect everything in BUILD_LOG.md, and flags anything inconsistent between the docs and the code.
-
----
-
 ## Right Now (Before Anything Else)
 
 ### 1. Install the SQLite Viewer extension
@@ -122,12 +104,6 @@ Running `python summarize_bills.py` on all 116 real bills will:
 
 You don't have to do this now — summaries are generated on demand. But doing it in one batch means the AI chat can immediately reference bill summaries without any delay.
 
-### 8. Run `python update_docs.py` after your next batch of changes
-Once you've made a few more commits, run this to have Claude synthesize BUILD_LOG.md into updated narrative entries in STORY.md and ARCHITECTURE.md.
-```bash
-python update_docs.py
-```
-
 ---
 
 ## Phase 2 — The Scoring System (Build This Next)
@@ -167,7 +143,6 @@ When you're ready to tackle this, ask Claude Code: *"I need to build a StatePoll
 
 - **`.env` is never committed** — your API keys are safe. If you ever need to set up the project on a new machine, copy from `.env.example` and re-enter your keys.
 - **`strawpoll.db` is gitignored** — the database doesn't get pushed to GitHub. Anyone who clones the repo needs to run `seed_db.py` + `tag_bills.py` to rebuild it.
-- **The post-commit hook lives in `.git/hooks/`** — this folder is NOT pushed to GitHub. If someone else clones the repo they won't have the hook. You'd need to re-run the hook setup or add a setup script.
 - **Congress.gov API rate limit** — free tier is ~1,000 requests/day. `tag_bills.py` used about 500. `summarize_bills.py` uses ~116. You're fine.
 - **Tokens for update_docs.py** — each run costs roughly $0.50-1.00 in Claude API tokens. Run it intentionally, not constantly.
 
@@ -182,3 +157,26 @@ Good prompts to use:
 - *"Add the senator voting record endpoint"*
 - *"Help me find and import state-level polling data"*
 - *"I want to add [new feature] — where does it fit in the architecture?"*
+
+---
+
+## End of Build Session: Sync the Docs
+
+No post-commit hook runs anymore — git itself is the audit log. When you're done committing for the day, run this once to have Claude read the full git history and update ARCHITECTURE.md:
+
+```bash
+python update_docs.py
+```
+
+**What it does:**
+- Reads every commit (hash, date, message, file stats) directly from `git log`
+- Reads the current source files to catch anything the commit messages missed
+- Rewrites ARCHITECTURE.md with all changes reflected and roadmap checkboxes updated
+- Prints any discrepancies it finds between the docs and the actual code
+
+**When to run it:**
+- After a batch of related commits (feature complete, bug fixed, seed run finished)
+- Before starting a new Claude Code session, so the docs are current
+- Any time you want ARCHITECTURE.md to catch up
+
+**Cost:** ~$0.50–1.00 per run in Claude API tokens. Run it intentionally — once per session, not after every commit.
