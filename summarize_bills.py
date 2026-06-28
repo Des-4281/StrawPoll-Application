@@ -129,7 +129,7 @@ Full text (may be truncated):
 Write a structured summary with these exact sections. Be specific — name the actual programs, dollar amounts, agencies, companies, districts, countries, and legal authorities in the bill. Do not generalize or paraphrase vaguely.
 
 ## Plain English Summary
-2-3 sentences: what does this bill do and why was it introduced?
+What does this bill do and why was it introduced? Cover all major provisions — as long as needed, no length limit.
 
 ## Key Provisions
 Bullet list of the 4-8 most important things the bill actually does or changes in law. Lead with the main purpose, but include secondary provisions too.
@@ -159,7 +159,8 @@ One sentence on why this was controversial, who opposed it, or why it was bipart
 """
 
     try:
-        response = claude.messages.create(
+        response = await asyncio.to_thread(
+            claude.messages.create,
             model="claude-opus-4-8",
             max_tokens=2000,
             messages=[{"role": "user", "content": prompt}],
@@ -171,14 +172,15 @@ One sentence on why this was controversial, who opposed it, or why it was bipart
 
 
 async def run_migration():
-    """Add ai_summary column to bills table if it doesn't exist yet."""
+    """Add new columns to bills table if they don't exist yet."""
     async with AsyncSessionLocal() as db:
-        try:
-            await db.execute(text("ALTER TABLE bills ADD COLUMN ai_summary TEXT"))
-            await db.commit()
-            log.info("Added column: ai_summary")
-        except Exception:
-            pass  # already exists
+        for col in ["ai_summary TEXT", "bill_description TEXT", "yea_impact TEXT"]:
+            try:
+                await db.execute(text(f"ALTER TABLE bills ADD COLUMN {col}"))
+                await db.commit()
+                log.info("Added column: %s", col.split()[0])
+            except Exception:
+                pass  # already exists
 
 
 async def summarize_all(

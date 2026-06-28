@@ -53,13 +53,10 @@ AK, AL, AR, CO, DE, GA, IA, ID, IL, KS, KY, LA, MA, ME, MI, MN, MS, MT, NC, NE, 
 python seed_candidates.py --check-status   # scans campaign websites for withdrawal language
 ```
 
-### 3. Run one more seed refresh (fix URL casing)
-A bug was discovered mid-run: FEC sometimes stores URLs in all-caps (`"HTTPS://WWW.SITE.COM"`).
-The fix is already in the code. Run this once to re-fetch positions for candidates who got
-a bad URL on the first pass (like McMorrow in MI):
-```bash
-python seed_candidates.py --refresh
-```
+### 3. Build a URL scraper for candidates (future task)
+209 candidates have bad or missing URLs from FEC — all-caps domains, double-scheme URLs, stale links. Running `--refresh` would re-use the same bad FEC data, so it's not worth doing.
+
+The real fix is a scraper that finds each candidate's actual current campaign website: search their name + state + "2026 senate campaign" and validate the result. Ask Claude Code: *"Build a script that finds and validates current campaign website URLs for candidates where `needs_update=True`, using web search and updating `website_url` in the DB."*
 
 ### 3. Push the latest commits to GitHub
 ```bash
