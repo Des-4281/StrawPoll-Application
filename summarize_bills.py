@@ -99,15 +99,14 @@ async def fetch_bill_text_url(client: httpx.AsyncClient, bill_number: str) -> st
 async def fetch_bill_text(client: httpx.AsyncClient, text_url: str) -> str | None:
     """Download the actual bill text from the URL returned by the API."""
     try:
-        r = await client.get(text_url, timeout=30.0)
+        r = await client.get(text_url, timeout=300.0)
         r.raise_for_status()
         raw = r.text
         # Strip HTML tags if present (rough but good enough for Claude input)
         if "<html" in raw.lower():
             raw = re.sub(r"<[^>]+>", " ", raw)
             raw = re.sub(r"\s+", " ", raw).strip()
-        # Trim to 40,000 chars — enough for Claude to understand any bill
-        return raw[:40000]
+        return raw
     except Exception as e:
         log.warning("Text download failed for %s: %s", text_url, e)
         return None
@@ -154,27 +153,162 @@ Estimated cost or savings. Use CBO score numbers if referenced. Break out any sp
 ## Legal Basis
 What existing laws this amends, what agencies are given new authority, any constitutional or legal questions raised.
 
-## Political Context
-One sentence on why this was controversial, who opposed it, or why it was bipartisan.
+## Human Impact
+What can people, organizations, or government agencies now do that they could not before — or can no longer do as a result of this bill? Name the specific groups affected and the concrete legal, financial, or regulatory change acting on them. Focus on mechanics, not politics.
 """
 
     try:
         response = await asyncio.to_thread(
             claude.messages.create,
             model="claude-opus-4-8",
-            max_tokens=2000,
+            max_tokens=32000,
             messages=[{"role": "user", "content": prompt}],
         )
+        if response.stop_reason == "max_tokens":
+            log.warning("  ⚠ %s summary hit the 32000 token limit — output was truncated", bill_number)
         return response.content[0].text.strip()
     except Exception as e:
         log.warning("Claude summarization failed for %s: %s", bill_number, e)
         return None
 
 
+LARGE_BILL_THRESHOLD = 2_500_000  # chars — bills above this exceed Claude's 1M token context window
+
+
+async def extract_chunk_with_claude(
+    bill_number: str, title: str, chunk_text: str, chunk_num: int, total_chunks: int
+) -> str | None:
+    """Extract provisions from one chunk of a large bill. Returns bullet-point extraction."""
+    prompt = f"""You are reading part {chunk_num} of {total_chunks} of a large US congressional bill.
+Extract ALL notable content from this section — do not summarize, just extract facts.
+
+Bill: {bill_number}
+Title: {title or "Unknown"}
+Section: Part {chunk_num} of {total_chunks}
+
+{chunk_text}
+
+Extract the following from this section:
+
+## Key Provisions in This Section
+Every significant thing this section does or changes in law. Name programs, dollar amounts, agencies, legal authorities.
+
+## Hidden or Overlooked Provisions in This Section
+Every provision not obvious from the bill's title:
+- Earmarks or funding directed to specific states, districts, cities, or localities
+- Benefits, contracts, or carve-outs for specific named companies or industries
+- Foreign aid, loan guarantees, or advantages for specific countries or foreign entities
+- Subsidy programs for specific sectors (dairy, ethanol, oil, etc.)
+- Riders — provisions unrelated to the bill's stated topic
+- Liability shields or legal protections for specific industries or entities
+- Sunset clauses, delayed implementation dates, or phase-in provisions
+If none found, write "None identified."
+
+## Fiscal Items in This Section
+Every specific dollar amount named, with the recipient or purpose.
+
+## Who Is Affected in This Section
+Specific Americans, industries, companies, or groups impacted.
+
+## Legal Authorities Modified in This Section
+Existing laws amended, agencies given new authority, constitutional questions raised.
+"""
+    try:
+        response = await asyncio.to_thread(
+            claude.messages.create,
+            model="claude-opus-4-8",
+            max_tokens=32000,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        if response.stop_reason == "max_tokens":
+            log.warning("  ⚠ Chunk %d/%d for %s hit 32000 token limit", chunk_num, total_chunks, bill_number)
+        return response.content[0].text.strip()
+    except Exception as e:
+        log.warning("Chunk %d extraction failed for %s: %s", chunk_num, bill_number, e)
+        return None
+
+
+async def synthesize_chunks_with_claude(
+    bill_number: str, title: str, extractions: list[str]
+) -> str | None:
+    """Synthesize chunk extractions into the standard 7-section summary."""
+    extractions_text = "\n\n---\n\n".join(
+        f"PART {i + 1} EXTRACTION:\n{ext}" for i, ext in enumerate(extractions)
+    )
+    prompt = f"""You are synthesizing extracted content from a large US congressional bill into a structured summary.
+
+Bill: {bill_number}
+Title: {title or "Unknown"}
+
+The following are structured extractions from each part of the bill:
+
+{extractions_text}
+
+Using ALL of the above extractions, write a complete structured summary with these exact sections:
+
+## Plain English Summary
+What does this bill do and why was it introduced? Cover all major provisions across all parts.
+
+## Key Provisions
+Bullet list of the 6-10 most important things the bill does across all parts.
+
+## Hidden or Overlooked Provisions
+Combine ALL hidden provisions found across every part. Include every earmark, rider, carve-out, and non-obvious provision found anywhere in the bill. If none, write "None identified."
+
+## Who It Affects
+Which Americans, industries, companies, or groups benefit — and who bears the cost or is negatively impacted.
+
+## Fiscal Impact
+Total estimated cost or savings. All specific dollar amounts from all parts combined. Include CBO references if present.
+
+## Legal Basis
+What existing laws this amends, what agencies get new authority, constitutional questions raised.
+
+## Human Impact
+What can people, organizations, or government agencies now do that they could not before — or can no longer do? Name specific groups and the concrete legal, financial, or regulatory change acting on them. Focus on mechanics, not politics.
+"""
+    try:
+        response = await asyncio.to_thread(
+            claude.messages.create,
+            model="claude-opus-4-8",
+            max_tokens=32000,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        if response.stop_reason == "max_tokens":
+            log.warning("  ⚠ %s synthesis hit the 32000 token limit — output was truncated", bill_number)
+        return response.content[0].text.strip()
+    except Exception as e:
+        log.warning("Synthesis failed for %s: %s", bill_number, e)
+        return None
+
+
+async def summarize_with_claude_chunked(bill_number: str, title: str, text: str) -> str | None:
+    """Map-reduce summarization for bills too large for a single Claude call."""
+    chunk_size = 2_400_000
+    overlap = 100_000
+    chunks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size - overlap)]
+    log.info("  → Large bill: %d chars → %d chunks", len(text), len(chunks))
+
+    extractions = []
+    for i, chunk in enumerate(chunks):
+        log.info("  → Extracting chunk %d/%d (%d chars)...", i + 1, len(chunks), len(chunk))
+        extraction = await extract_chunk_with_claude(bill_number, title, chunk, i + 1, len(chunks))
+        if extraction:
+            extractions.append(extraction)
+        else:
+            log.warning("  → Chunk %d failed — continuing with remaining chunks", i + 1)
+
+    if not extractions:
+        return None
+
+    log.info("  → Synthesizing %d chunk extractions...", len(extractions))
+    return await synthesize_chunks_with_claude(bill_number, title, extractions)
+
+
 async def run_migration():
     """Add new columns to bills table if they don't exist yet."""
     async with AsyncSessionLocal() as db:
-        for col in ["ai_summary TEXT", "bill_description TEXT", "yea_impact TEXT"]:
+        for col in ["ai_summary TEXT", "bill_description TEXT", "yea_impact TEXT", "bill_text_url TEXT"]:
             try:
                 await db.execute(text(f"ALTER TABLE bills ADD COLUMN {col}"))
                 await db.commit()
@@ -187,6 +321,8 @@ async def summarize_all(
     specific_bill: str | None = None,
     limit: int | None = None,
     dry_run: bool = False,
+    bills_only: bool = False,
+    urls_only: bool = False,
 ) -> None:
     await run_migration()
 
@@ -196,21 +332,23 @@ async def summarize_all(
                 select(Bill).where(Bill.bill_number == specific_bill)
             )
         else:
-            stmt = (
-                select(Bill)
-                .where(Bill.bill_type != "Procedural")
-                .where(Bill.ai_summary.is_(None))
-            )
+            stmt = select(Bill).where(Bill.bill_type != "Procedural")
+            if urls_only:
+                stmt = stmt.where(Bill.bill_text_url.is_(None))
+            else:
+                stmt = stmt.where(Bill.ai_summary.is_(None))
+            if bills_only:
+                stmt = stmt.where(Bill.bill_type == "Bill")
             if limit:
                 stmt = stmt.limit(limit)
             result = await db.execute(stmt)
         bills = result.scalars().all()
 
     if not bills:
-        log.info("No bills need summarizing. Use --bill or check if ai_summary is already populated.")
+        log.info("No bills to process.")
         return
 
-    log.info("Bills to summarize: %d", len(bills))
+    log.info("Bills to process: %d", len(bills))
     success = 0
     skipped = 0
 
@@ -223,6 +361,17 @@ async def summarize_all(
             if not text_url:
                 log.info("  → No text available on Congress.gov, skipping")
                 skipped += 1
+                continue
+
+            # --urls-only: just save the URL, skip text download and Claude
+            if urls_only:
+                async with AsyncSessionLocal() as db:
+                    b = await db.get(Bill, bill.bill_number)
+                    if b:
+                        b.bill_text_url = text_url
+                        await db.commit()
+                log.info("  → Saved text URL")
+                success += 1
                 continue
 
             # Step 2: Download the actual text
@@ -239,38 +388,47 @@ async def summarize_all(
                 continue
 
             # Step 3: Extract structured summary with Claude
-            summary = await summarize_with_claude(
-                bill.bill_number,
-                bill.title or "",
-                bill_text,
-            )
+            # Large bills (>2.5M chars) exceed Claude's 1M token context — use map-reduce
+            if len(bill_text) > LARGE_BILL_THRESHOLD:
+                summary = await summarize_with_claude_chunked(
+                    bill.bill_number, bill.title or "", bill_text
+                )
+            else:
+                summary = await summarize_with_claude(
+                    bill.bill_number, bill.title or "", bill_text
+                )
 
             if not summary:
                 skipped += 1
                 continue
 
-            # Step 4: Save to DB
+            # Step 4: Save summary and URL to DB
             async with AsyncSessionLocal() as db:
                 b = await db.get(Bill, bill.bill_number)
                 if b:
                     b.ai_summary = summary
+                    b.bill_text_url = text_url
                     await db.commit()
 
             log.info("  → Saved (%d chars)", len(summary))
             success += 1
 
-    log.info("Done. Summarized: %d | Skipped (no text): %d", success, skipped)
+    log.info("Done. Processed: %d | Skipped: %d", success, skipped)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Summarize bill text using Claude")
     parser.add_argument("--bill", help="Summarize a specific bill number (e.g. S5-119)")
     parser.add_argument("--limit", type=int, help="Max number of bills to process")
+    parser.add_argument("--bills-only", action="store_true", dest="bills_only", help="Skip resolutions and joint resolutions")
     parser.add_argument("--dry-run", action="store_true", dest="dry_run")
+    parser.add_argument("--urls-only", action="store_true", dest="urls_only", help="Only fetch and save bill_text_url, skip text download and Claude")
     args = parser.parse_args()
 
     asyncio.run(summarize_all(
         specific_bill=args.bill,
         limit=args.limit,
+        bills_only=args.bills_only,
         dry_run=args.dry_run,
+        urls_only=args.urls_only,
     ))

@@ -46,8 +46,8 @@ async def describe_with_claude(bill_number: str, title: str, ai_summary: str) ->
     try:
         desc_response = await asyncio.to_thread(
             claude.messages.create,
-            model="claude-sonnet-4-6",
-            max_tokens=300,
+            model="claude-opus-4-8",
+            max_tokens=32000,
             messages=[{
                 "role": "user",
                 "content": (
@@ -70,8 +70,8 @@ async def describe_with_claude(bill_number: str, title: str, ai_summary: str) ->
     try:
         impact_response = await asyncio.to_thread(
             claude.messages.create,
-            model="claude-sonnet-4-6",
-            max_tokens=1000,
+            model="claude-opus-4-8",
+            max_tokens=32000,
             messages=[{
                 "role": "user",
                 "content": (
@@ -79,9 +79,12 @@ async def describe_with_claude(bill_number: str, title: str, ai_summary: str) ->
                     f"Bill: {bill_number}\n"
                     f"Title: {title or 'Unknown'}\n\n"
                     f"Here is the full analysis of this bill:\n{ai_summary}\n\n"
-                    f"Write 2-3 sentences describing what a Yea vote on this bill concretely accomplished. "
-                    f"Start with a verb. Be specific — name dollar amounts, programs, or policy changes. "
-                    f"Example: 'Authorized $886B in defense spending for FY2024 and expanded military healthcare benefits.'"
+                    f"List every concrete impact of a Yea vote on this bill as bullet points. "
+                    f"Start with the primary impact points, then list all remaining impacts ordered by how broadly they apply — "
+                    f"nationwide effects first, then industry-specific, then group-specific, then locality- or company-specific provisions last. "
+                    f"Each bullet should be 1-3 sentences. Be specific — name dollar amounts, programs, agencies, and groups affected. "
+                    f"Do not combine unrelated impacts into one bullet. Cover everything. "
+                    f"Write at a 6th-grade reading level. Use short sentences and strong verbs. Cut any word that doesn't add meaning."
                 ),
             }],
         )
@@ -105,8 +108,8 @@ async def extract_secondary_tags(
     try:
         response = await asyncio.to_thread(
             claude.messages.create,
-            model="claude-sonnet-4-6",
-            max_tokens=200,
+            model="claude-opus-4-8",
+            max_tokens=32000,
             messages=[{
                 "role": "user",
                 "content": (

@@ -124,7 +124,18 @@ Bills count more than Resolutions. Omnibus bills need special handling. Ask Clau
 
 ---
 
-## Phase 3 — Polling Data (After Phase 2)
+## Phase 3 — UI (After Phase 2)
+
+### Bill page with copilot sidebar
+Each bill gets a page that displays the full bill text fetched live from Congress.gov via `bill_text_url` (no storage on our end). A chat panel sits alongside the text so users can ask questions about what they're reading. The chat uses `ai_summary` as context for most questions; for deeper questions it can fetch the full text on demand.
+
+- `bill_text_url` is already stored on the bills table — the UI just fetches it
+- The sidebar chat reuses the existing `/chat` endpoint with the bill's `ai_summary` injected as system context
+- Keep users in the app rather than linking out to Congress.gov — the integrated reading + chat experience is the product
+
+---
+
+## Phase 4 — Polling Data (After Phase 3)
 
 You need state-level polling broken down by issue. The best sources:
 
@@ -133,6 +144,61 @@ You need state-level polling broken down by issue. The best sources:
 - **FiveThirtyEight polling averages** — They publish CSVs on GitHub for presidential approval and some issues. Free and bulk-downloadable.
 
 When you're ready to tackle this, ask Claude Code: *"I need to build a StatePolling table and import mechanism for state-level polling data by issue category. Help me find the best free data source and build the import."*
+
+---
+
+## Phase 5 — Expanding Legislative Coverage
+
+The current system tracks Senate floor votes on bills. These are real, binding actions — but they're only part of what senators do. Add these in order of value:
+
+### Sponsored & co-sponsored bills that never got a floor vote
+A senator co-sponsoring a bill is a public position even without a vote. If Senator X co-sponsored a healthcare bill that died in committee, that's trackable. Congress.gov API has full co-sponsorship records for every introduced bill.
+- Add a `Cosponsorship` table: `senator_bioguide_id`, `bill_number`, `is_primary_sponsor`
+- Source: `GET /bill/{congress}/{type}/{number}/cosponsors` on Congress.gov API
+- Ask Claude Code: *"Add co-sponsorship data from Congress.gov to track senator positions on bills that never got a floor vote."*
+
+### House-passed bills that came to the Senate
+Bills passed by the House and sent to the Senate are in Congress.gov. Some die without a Senate vote. Tracking these shows what the Senate chose not to act on — which is itself a position.
+- Source: Congress.gov API, filter by `latestAction` showing "Received in the Senate"
+- Ask Claude Code: *"Seed House-passed bills that reached the Senate but never got a floor vote."*
+
+### Confirmation votes (nominations)
+Some of the most significant Senate votes — Supreme Court justices, cabinet members, federal judges, ambassadors. These are in Senate.gov roll call XML but use Presidential Nomination format (PN123-119) instead of bill numbers, so the current seeder skips them. High priority.
+- Ask Claude Code: *"Add confirmation vote tracking — seed PN-format votes from Senate.gov and build a Nomination model with nominee name, position, and confirmation outcome."*
+
+### Amendment votes
+During bill consideration, senators vote on specific amendments. A senator might vote Yea on a final bill but Nay on a key amendment — revealing their position on a single provision. Already partially present in the DB (one "Amendment Agreed to" vote exists). Valuable for complex bills like the NDAA and BBB.
+- Ask Claude Code: *"Expand amendment vote tracking — link amendment votes to their parent bill and surface them on senator record pages."*
+
+### Treaty ratifications
+Less frequent but constitutionally significant — the Senate votes to ratify international trade agreements, arms control treaties, and diplomatic agreements. Same format issue as nominations.
+- Ask Claude Code: *"Add treaty ratification votes to the tracking system."*
+
+### Senate committee votes
+Some bills die in committee without ever reaching the full Senate floor. Committee votes are published by each Senate committee individually — no single API covers all of them. Complex to collect but valuable for showing where bills are killed before the public sees them.
+
+### Interactive Committee Explorer
+Each Senate committee has a defined jurisdiction, a membership roster, and a record of what bills they advanced or killed. This is a major transparency feature — most voters have no idea what committees their senators sit on or what power that gives them.
+
+**What to build:**
+- A `Committee` table: name, jurisdiction description, type (standing, select, joint)
+- A `CommitteeMembership` table: senator + committee + role (chair, ranking member, member)
+- A `CommitteeAction` table: bill + committee + action (referred, advanced, tabled, hearing held)
+- UI: clickable committee cards explaining what each committee controls in plain English
+- Drill down: who sits on it, what bills they've acted on, whether those bills survived to a floor vote
+
+**Data sources:**
+- Senate.gov publishes committee membership rosters (senate.gov/committees)
+- Congress.gov API has committee referral data per bill (`/bill/{congress}/{type}/{number}/committees`)
+- Ask Claude Code: *"Build the Committee explorer — seed committee membership from Senate.gov and link bills to committees via Congress.gov API."*
+
+### Resolutions — visibility actions vs. real actions
+Resolutions (S.Res, H.Res, S.Con.Res) are already in the DB but excluded from summarization. They matter because they reveal how senators signal positions without making binding law — symbolic statements, commemorations, procedural positioning.
+
+When you add resolutions back:
+- Tag them separately as "Symbolic" or "Procedural" in the UI so users understand a resolution vote is a visibility action, not a law being made
+- Surface them on senator record pages with clear labeling: "This was a non-binding resolution"
+- Use them to show the full picture of a senator's public positioning, not just their legislative record
 
 ---
 
@@ -154,6 +220,29 @@ Good prompts to use:
 - *"Add the senator voting record endpoint"*
 - *"Help me find and import state-level polling data"*
 - *"I want to add [new feature] — where does it fit in the architecture?"*
+
+---
+
+## Keeping the Data Fresh (Ongoing)
+
+The 119th Congress is still active — new votes happen weekly. The pipeline needs to be re-run periodically to stay current.
+
+**Full refresh order:**
+```bash
+python seed_db.py              # pulls new votes + bills from Senate.gov
+python tag_bills.py            # tags any new bills
+python summarize_bills.py      # summarizes new bills (skips already-done ones)
+python describe_bills.py       # generates descriptions for new bills
+```
+
+**How to trigger it:**
+
+- **Calendar reminder** — simplest. Set a weekly or bi-weekly reminder to run the above sequence. Takes ~10-30 min depending on how many new votes came in.
+- **Cron job** — add to your Mac's crontab to run automatically (e.g. every Sunday night). Ask Claude Code: *"Set up a cron job to run the data refresh pipeline weekly."*
+- **Smart trigger** — have `seed_db.py` write the count of new bills/votes it inserted, and only run the downstream scripts if the count > 0. Most efficient, slightly more work to build.
+
+**When the 120th Congress starts (Jan 2027):**
+Update the congress number in `seed_db.py` and re-run everything from scratch for the new session.
 
 ---
 
