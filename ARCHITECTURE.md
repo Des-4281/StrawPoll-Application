@@ -1,7 +1,8 @@
 # StrawPoll Voting App — Architecture & Build Guide
 
-**Last updated:** 2026-06-25
-**Maintainer:** This file is updated manually and by `python update_docs.py`. The post-commit hook writes to BUILD_LOG.md automatically on every commit. Run `update_docs.py` to synthesize BUILD_LOG into this file and check for discrepancies.
+**Last updated:** 2026-06-28
+**Last synced:** 2026-06-28
+**Maintainer:** This file is updated manually and by `python update_docs.py`. Run `update_docs.py` to synthesize recent changes into this file and check for discrepancies.
 
 ---
 
@@ -35,29 +36,33 @@ The app is backend-only right now (a REST API). A frontend (web or mobile) will 
 
 ```
 StrawPoll Application/
-├── main.py              — FastAPI app, API endpoints, AI agent loop
-├── models.py            — SQLAlchemy database schema (all tables)
-├── database.py          — DB engine setup, session factory, init_db()
-├── ai_tools.py          — Tool definitions Claude can call + their implementations
-├── services.py          — LegiScan API client (live bill lookups)
-├── seed_db.py           — One-time data import script (politicians + votes)
-├── tag_bills.py         — One-time tagging script (issue categories per bill)
-├── seed_candidates.py   — Imports 2026 Senate candidates from FEC + extracts positions from campaign websites
-├── summarize_bills.py   — On-demand bill text fetcher + Claude summarizer
-├── update_docs.py       — On-demand ARCHITECTURE.md updater (reads BUILD_LOG, uses Claude)
-├── README.md            — Start here: guided reading order, quick setup, file guide
-├── PROBLEM.md           — Plain English: what problems this solves and why each feature exists
-├── STORY.md             — Development journal: how it was built, step by step, and why
-├── ARCHITECTURE.md      — Technical reference: schema, data sources, API, setup
-├── NEXT_STEPS.md        — Personal action list: what to do next and in what order
-├── BUILD_LOG.md         — Auto-written after every git commit by the post-commit hook
-├── requirements.txt     — Python dependencies
-├── .env                 — API keys (never commit this file)
-├── .env.example         — Placeholder template for new developers
-├── .gitignore           — Protects .env, .claude/, *.db, venv/
-├── .git/hooks/post-commit — Shell hook that writes to BUILD_LOG.md on every commit
-└── strawpoll.db         — SQLite database file (gitignored)
+├── main.py                  — FastAPI app, API endpoints, AI agent loop
+├── models.py                — SQLAlchemy database schema (all tables)
+├── database.py              — DB engine setup, session factory, init_db()
+├── ai_tools.py              — Tool definitions Claude can call + their implementations
+├── services.py              — LegiScan API client (live bill lookups)
+├── seed_db.py               — One-time data import script (politicians + votes)
+├── tag_bills.py             — One-time tagging script (issue categories per bill)
+├── seed_candidates.py       — Imports 2026 Senate candidates from FEC + extracts positions from campaign websites
+├── summarize_bills.py       — On-demand bill text fetcher + Claude summarizer (full text, map-reduce for large bills)
+├── describe_bills.py        — Generates bill_description and yea_impact fields from ai_summary; appends secondary tags
+├── describe_bills_archive_v1.md — Archive of first-pass describe_bills outputs before the v2 rewrite
+├── update_docs.py           — On-demand ARCHITECTURE.md updater (reads source files, uses Claude; no longer depends on BUILD_LOG)
+├── README.md                — Start here: guided reading order, quick setup, file guide
+├── PROBLEM.md               — Plain English: what problems this solves and why each feature exists
+├── STORY.md                 — Development journal: how it was built, step by step, and why
+├── ARCHITECTURE.md          — Technical reference: schema, data sources, API, setup
+├── NEXT_STEPS.md            — Personal action list: what to do next and in what order
+├── BUILD_LOG.md             — Manually maintained log of major commits
+├── GOAL.md                  — Project goals and vision (reformatted for readability)
+├── requirements.txt         — Python dependencies
+├── .env                     — API keys (never commit this file)
+├── .env.example             — Placeholder template for new developers
+├── .gitignore               — Protects .env, .claude/, *.db, venv/
+└── strawpoll.db             — SQLite database file (gitignored)
 ```
+
+**Note on the post-commit hook:** The `.git/hooks/post-commit` shell hook that previously wrote to `BUILD_LOG.md` automatically on every commit has been removed. `BUILD_LOG.md` is now maintained manually. `update_docs.py` has been updated accordingly and no longer depends on `BUILD_LOG.md` — it reads source files directly.
 
 ---
 
@@ -91,6 +96,9 @@ One row per bill or procedural vote that was voted on. Primary key is a syntheti
 | bill_type | TEXT | "Bill", "Joint Resolution", "Resolution", or "Procedural" |
 | is_omnibus | BOOL | True if bill covers many unrelated topics (e.g. appropriations bills) |
 | ai_summary | TEXT | Claude-extracted structured summary (~800 words), populated by summarize_bills.py |
+| bill_text_url | TEXT | Congress.gov URL for the most recent plain-text bill version — stored so the UI can fetch full text on demand without us storing it |
+| bill_description | TEXT | UI-facing plain-English description (75–150 words), generated by describe_bills.py |
+| yea_impact | TEXT | Bullet-point list of every concrete impact of a Yea vote, ordered broadest to narrowest; generated by describe_bills.py |
 | updated_at | DATETIME | Row last modified |
 
 **bill_number format:** We construct this as `{PREFIX}{NUMBER}-{CONGRESS}`. Examples:
@@ -158,7 +166,7 @@ One row per person running for office in an upcoming election. Populated by `see
 - `--check-status` mode: re-scans all declared candidates' websites for withdrawal language. Run weekly during campaign season.
 - After primaries: manually update nominees to `primary_winner` and everyone else in that state to `primary_loser`. See NEXT_STEPS.md for the SQL to do this.
 
-**Important:** FEC's `candidate_inactive` field is NOT used for withdrawal detection. Despite its name, it's an administrative flag that's set for many actively-running candidates including sitting senators. It does not reliably indicate withdrawal from the current race.
+**Important:** FEC's `candidate_inactive` field is NOT used for withdrawal detection. Despite its name, it's an administrative flag that's set for many actively-running candidates including sitting senators (Tuberville, Daines, Tillis, Tina Smith). It does not reliably indicate withdrawal from the current race.
 
 **Why this matters:** Incumbents have a voting record (in the `votes` table) AND stated positions (in `candidates.positions`). Challengers only have stated positions. The comparison between what incumbents *say* and how they *vote* is a key feature for Phase 2.
 
@@ -255,15 +263,34 @@ AK, AL, AR, CO, DE, GA, IA, ID, IL, KS, KY, LA, MA, ME, MI, MN, MS, MT, NC, NE, 
 Optional but powerful. For each real bill (not procedural votes):
 
 1. Calls Congress.gov text endpoint to get the full bill text URL
-2. Downloads the actual text (plain text or HTML, strips tags)
-3. Sends up to 40,000 characters to Claude Opus 4.8
-4. Claude returns a structured ~800-word summary with sections: Plain English Summary, Key Provisions, Who It Affects, Fiscal Impact, Legal Basis, Political Context
-5. Stored in `bills.ai_summary` — one Claude call per bill, cached forever
+2. Downloads the actual text — **no character cap**, the full text is sent to Claude
+3. For very large bills (over 2.5M characters, e.g. the NDAA), uses **map-reduce chunking** with 100k character overlap to handle them without truncation
+4. Sends full text to Claude Opus 4.8 with `max_tokens=32000` to prevent response truncation
+5. Claude returns a structured ~800-word summary with sections: Plain English Summary, Key Provisions, Who It Affects, Fiscal Impact, Legal Basis, Political Context, **Hidden or Overlooked Provisions** (earmarks, riders, carve-outs, sunset clauses)
+6. Stores the full bill text URL in `bills.bill_text_url` so the UI can fetch on demand without us storing the raw text
+7. Stored in `bills.ai_summary` — one Claude call per bill, cached forever
 
 ```bash
-python summarize_bills.py               # all unsummarized bills
-python summarize_bills.py --bill S5-119 # one specific bill
-python summarize_bills.py --limit 20    # test run
+python summarize_bills.py                   # all unsummarized bills
+python summarize_bills.py --bill S5-119     # one specific bill
+python summarize_bills.py --limit 20        # test run
+python summarize_bills.py --urls-only       # backfill bill_text_url without re-summarizing
+```
+
+### Step 5: Describe bills (`describe_bills.py`)
+
+A second-pass pipeline that runs after `summarize_bills.py`. Reads `bills.ai_summary` and generates two UI-facing fields plus enriches the tags:
+
+1. **`bill_description`** — a 75–150 word plain-English description of what the bill does. Main points only — no riders or hidden provisions. Designed for non-technical users.
+2. **`yea_impact`** — a bullet-point list of every concrete impact a Yea vote would have, ordered from broadest to narrowest. This is the key field for the senator record page — it lets users understand exactly what a senator was voting *for* or *against* in plain terms.
+3. **Secondary tag extraction** — appends additional issue tags found in the summary without overwriting the primary tags from `tag_bills.py`.
+
+This script uses Claude Opus 4.8 for all calls.
+
+```bash
+python describe_bills.py                    # all bills with ai_summary but missing description
+python describe_bills.py --bill S5-119      # one specific bill
+python describe_bills.py --redescribe       # overwrite all existing descriptions
 ```
 
 ---
@@ -274,7 +301,7 @@ This is a key design question: how do you score votes without imposing a politic
 
 **The answer: describe what they voted FOR, not whether it was right or wrong.**
 
-Instead of labeling votes "progressive" or "conservative," each bill gets a plain-English description of what a Yea vote meant in concrete policy terms. For example:
+Instead of labeling votes "progressive" or "conservative," each bill gets a plain-English description of what a Yea vote meant in concrete policy terms. The `yea_impact` field (generated by `describe_bills.py`) is the primary mechanism for this. For example:
 
 | Bill | Issue Tag | Yea vote meant... |
 |---|---|---|
@@ -288,7 +315,7 @@ This framing is factual and neutral. Whether funding Medicaid is good or bad is 
 
 For each senator, for each issue category:
 - Find all bills tagged with that category they voted on
-- For each bill, store a `yea_action` description (what a Yea vote did)
+- For each bill, the `yea_impact` field describes what a Yea vote concretely did
 - Count: how many times did they vote to expand/fund vs. restrict/cut in that issue area?
 - Present it as a factual record: "Voted for increased military spending 12 of 14 times" — not a score
 
@@ -321,23 +348,39 @@ The user sends a natural language question like "How did Senator Murkowski vote 
 
 ---
 
+## Senator Record Endpoint
+
+**Endpoint:** `GET /senator/{bioguide_id}/record`
+
+Returns a senator's full voting record grouped by issue category. This is the Phase 2 core feature — it powers the senator profile page.
+
+For each issue category the senator has voted on, the response includes:
+- Yea / Nay / Present vote counts
+- A list of every bill in that category with: bill number, title, the senator's position, bill status, `bill_description`, `yea_impact`, and all tags
+
+Procedural votes are excluded — only real legislation (Bills, Resolutions, Joint Resolutions) is shown.
+
+```bash
+# Example
+curl http://localhost:8001/senator/M000303/record   # John McCain (if he were current)
+```
+
+---
+
 ## The Documentation System (How This File Stays Current)
 
-Two separate mechanisms, intentionally split so you control cost:
+**Important change as of 2026-06-27:** The post-commit hook has been removed. `BUILD_LOG.md` is now maintained manually, and `update_docs.py` has been updated to read source files directly rather than depending on `BUILD_LOG.md`.
 
-### 1. Free auto-logging (every commit)
-The `.git/hooks/post-commit` shell script fires automatically after every `git commit`. It appends a structured entry to `BUILD_LOG.md` containing the commit hash, timestamp, author, files changed, and commit message. Zero AI, zero tokens. This always runs — you never have to think about it.
-
-### 2. On-demand synthesis (`update_docs.py`)
+### On-demand synthesis (`update_docs.py`)
 Run manually when you want this ARCHITECTURE.md to catch up to recent changes:
 
 ```bash
 python update_docs.py
 ```
 
-This sends `BUILD_LOG.md` + all source files to Claude, which rewrites ARCHITECTURE.md with updates applied and flags any discrepancies between what the docs say and what the code actually does. Costs tokens, so you run it intentionally — not after every commit.
+This sends all source files to Claude, which rewrites ARCHITECTURE.md with updates applied and flags any discrepancies between what the docs say and what the code actually does. Costs tokens, so you run it intentionally — not after every commit.
 
-**When to run it:** After a batch of related commits wraps up a feature. Not after every single commit.
+**When to run it:** After a batch of related commits wraps up a feature.
 
 ---
 
@@ -351,6 +394,7 @@ All endpoints are documented interactively at `http://localhost:8001/docs` when 
 | POST | `/chat` | Send a message, get AI response |
 | POST | `/favorites` | Save a politician or bill to watchlist |
 | GET | `/favorites/{user_id}` | Get a user's watchlist |
+| GET | `/senator/{bioguide_id}/record` | Full voting record grouped by issue category, with yea_impact per bill |
 
 ```bash
 # Start the server
@@ -365,6 +409,9 @@ curl -X POST http://localhost:8001/users \
 curl -X POST http://localhost:8001/chat \
   -H "Content-Type: application/json" \
   -d '{"user_id": 1, "message": "How did Susan Collins vote on healthcare bills?"}'
+
+# Get a senator's full voting record by issue category
+curl http://localhost:8001/senator/C001035/record
 ```
 
 ---
@@ -389,6 +436,7 @@ cp .env.example .env
 #   ANTHROPIC_API_KEY     — from console.anthropic.com
 #   LEGISCAN_API_KEY      — from legiscan.com/legiscan-api
 #   CONGRESS_GOV_API_KEY  — from api.congress.gov/sign-up
+#   FEC_API_KEY           — from api.data.gov/signup (free, instant)
 
 # 5. Seed the database (takes 5-15 minutes for 119th Congress)
 python seed_db.py
@@ -396,12 +444,18 @@ python seed_db.py
 # 6. Tag all bills (uses Congress.gov API, ~10 min)
 python tag_bills.py
 
-# 7. Seed 2026 Senate candidates (requires free FEC API key from api.data.gov/signup)
-# Add FEC_API_KEY to .env first, then:
+# 7. Seed 2026 Senate candidates
 python seed_candidates.py --dry-run   # preview
-python seed_candidates.py             # full import (~270 candidates, ~30 min)
+python seed_candidates.py             # full import (~273 candidates, ~30 min)
 
-# 8. Start the server
+# 8. Summarize bills (optional but recommended — uses Congress.gov + Claude)
+python summarize_bills.py --limit 20  # test run first
+python summarize_bills.py             # all bills
+
+# 9. Generate bill descriptions and yea_impact fields (run after summarize_bills.py)
+python describe_bills.py
+
+# 10. Start the server
 uvicorn main:app --reload --port 8001
 ```
 
@@ -442,6 +496,7 @@ SELECT bill_number, tags FROM bills WHERE tags != '[]' LIMIT 5;
 | votes | 54,960 | Individual senator position per vote |
 | bills by type | 416 Procedural, 76 Joint Resolutions, 27 Bills, 13 Resolutions | |
 | tagged (non-procedural) | 116 of 116 | All real bills have issue category tags |
+| candidates | 273 | 2026 Senate candidates seeded; 64 with positions extracted at first run |
 
 ---
 
@@ -452,14 +507,15 @@ SELECT bill_number, tags FROM bills WHERE tags != '[]' LIMIT 5;
 - [x] Senate roll call votes (119th Congress, all 532 votes)
 - [x] Bill tagging system (22 issue categories, all 116 real bills tagged)
 - [x] AI chat endpoint (natural language vote queries)
-- [x] Bill text summarizer (summarize_bills.py — on-demand, Claude extracts structured summary)
-- [x] Auto-documentation system (BUILD_LOG.md hook + update_docs.py)
+- [x] Bill text summarizer (summarize_bills.py — full text, map-reduce for large bills, Claude extracts structured summary)
+- [x] Auto-documentation system (update_docs.py; post-commit hook removed as of 2026-06-27)
 - [x] 2026 Senate candidate tracking (FEC data + Claude position extraction + race status)
 - [ ] Seed 118th Congress data for historical comparison
 
 ### Phase 2 — Scoring & Analysis
-- [ ] **`yea_action` field on bills** — one sentence describing what a Yea vote concretely did (e.g. "funded $50B for Medicaid expansion"). Claude classifies this from the bill summary. Neutral, factual, no political framing.
-- [ ] **Voting record display per senator per issue** — for each category, list all bills they voted on, what each Yea/Nay meant, and a plain-English summary of their record (e.g. "Voted to increase defense spending in 12 of 14 votes on Military & Defense bills")
+- [x] **`bill_description` and `yea_impact` fields** — `describe_bills.py` generates a plain-English description and bullet-point impact list for each bill from its `ai_summary`. Neutral, factual, no political framing.
+- [x] **`GET /senator/{bioguide_id}/record` endpoint** — returns full voting record grouped by issue category, with Yea/Nay/Present counts and `yea_impact` per bill. Excludes procedural votes.
+- [ ] **Voting record display per senator per issue** — frontend to render the record endpoint, with a plain-English summary of each senator's record per category (e.g. "Voted to increase defense spending in 12 of 14 votes")
 - [ ] **Score weighting** — weight Bills more than Resolutions (Resolutions don't change law), weight omnibus bills appropriately given they cover many topics
 
 ### Phase 3 — Polling Integration
@@ -469,9 +525,10 @@ SELECT bill_number, tags FROM bills WHERE tags != '[]' LIMIT 5;
 
 ### Phase 4 — API Expansion
 - [ ] `GET /senators/{state}` — all senators for a state with their voting record
-- [ ] `GET /senator/{bioguide_id}/record` — full issue-by-issue voting record
 - [ ] `GET /compare/{state}` — senator voting vs. state polling on same issues
 - [ ] `GET /bills` — paginated bill list with filtering by tag, type, congress
+- [ ] Committee explorer, confirmations tracker, amendments, treaties, co-sponsorships
+- [ ] Nightly data refresh pipeline (new votes auto-pulled from Senate.gov)
 
 ### Phase 5 — Frontend
 - [ ] Web app (React/Next.js or similar)
@@ -483,7 +540,7 @@ SELECT bill_number, tags FROM bills WHERE tags != '[]' LIMIT 5;
 ### Phase 6 — Scale
 - [ ] Migrate SQLite → PostgreSQL (one-line change in DATABASE_URL)
 - [ ] Add House votes (excluded now because House districts don't map cleanly to state polling)
-- [ ] Historical data: 117th, 116th Congress for trend analysis
+- [ ] Historical data: 118th, 117th, 116th Congress for trend analysis
 - [ ] Nightly data refresh (new votes auto-pulled from Senate.gov)
 
 ---
@@ -497,7 +554,7 @@ SELECT bill_number, tags FROM bills WHERE tags != '[]' LIMIT 5;
 | `theunitedstates.io` | 118th Congress and older bulk vote data | No | Hasn't published 119th yet |
 | LegiScan API | Bill search, details, status, sponsors | Yes (free) | Better search than Congress.gov |
 | Congress.gov API | Bill subject tags, full bill text | Yes (free) | Official; subject tags are human-assigned |
-| FEC API (api.open.fec.gov) | 2026 Senate candidates: name, state, party, incumbency, committee website URL | Yes (free, instant at api.data.gov/signup) | Official federal source; 309 funded D/R candidates |
+| FEC API (api.open.fec.gov) | 2026 Senate candidates: name, state, party, incumbency, committee website URL | Yes (free, instant at api.data.gov/signup) | Official federal source; 273 funded D/R candidates |
 | MIT Election Lab | House election results by district (1976–present) | No | Harvard Dataverse, CC license |
 | Cook Political Report | Cook PVI (district partisan lean) | Paywalled | GitHub aggregators exist |
 
