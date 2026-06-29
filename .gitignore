@@ -24,3 +24,10 @@ build/
 
 # Local archives and scratch files — not part of the codebase
 describe_bills_archive_v1.md
+
+#Candidate-related scraper
+candidate_scraper_README.md
+
+# Temporary working files for taxonomy seeding HITL — local only, ~16MB total
+# Delete this folder once all 22 categories are approved in policy_taxonomy.json
+taxonomy_working/

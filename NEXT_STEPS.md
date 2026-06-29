@@ -53,11 +53,6 @@ AK, AL, AR, CO, DE, GA, IA, ID, IL, KS, KY, LA, MA, ME, MI, MN, MS, MT, NC, NE, 
 python seed_candidates.py --check-status   # scans campaign websites for withdrawal language
 ```
 
-### 3. Build a URL scraper for candidates (future task)
-209 candidates have bad or missing URLs from FEC — all-caps domains, double-scheme URLs, stale links. Running `--refresh` would re-use the same bad FEC data, so it's not worth doing.
-
-The real fix is a scraper that finds each candidate's actual current campaign website: search their name + state + "2026 senate campaign" and validate the result. Ask Claude Code: *"Build a script that finds and validates current campaign website URLs for candidates where `needs_update=True`, using web search and updating `website_url` in the DB."*
-
 ### 3. Push the latest commits to GitHub
 ```bash
 git push
@@ -87,6 +82,100 @@ curl -X POST http://localhost:8001/chat \
 python summarize_bills.py --limit 3
 ```
 This will fetch 3 bills from Congress.gov, extract a plain-English summary including hidden provisions, and save it to the database. Takes about 2-3 minutes.
+
+---
+
+## Candidate Data Pipeline — Build These Next (In Order)
+
+Three files exist with full descriptions and skeletons. Build in this order:
+
+### A. `build_policy_taxonomy.py` + `policy_taxonomy.json` — build this first
+
+**What it is:** The neutral position taxonomy is the foundation everything else
+maps to. Without it, the position scraper has nothing to match against. Healthcare
+is pre-seeded as a format reference. The other 21 categories need to be generated.
+
+**First run — populate the empty categories one at a time:**
+```bash
+python build_policy_taxonomy.py --issue "Immigration"
+python build_policy_taxonomy.py --issue "Economy"
+# ... continue for each category
+python build_policy_taxonomy.py --list   # see what's approved so far
+```
+
+**What happens each run:**
+1. Claude web_search — one open instruction, no source list, no political label,
+   no nudge. Claude finds every distinct stated position that exists in public
+   political discourse on that issue. Any editorial direction about sources is a
+   bias injection point, so we don't add one.
+2. Positions are clustered by what they actually propose; N clusters comes from the data
+3. Each cluster → one neutral statement + source URL + `derived_from` (the raw text)
+4. Raw finds (~750KB) written to `taxonomy_working/{issue}_raw.json` before HITL starts
+   — survives terminal crash, enables cheap [m] calls without re-fetching
+5. HITL: each statement shown side by side with its raw source text
+   → [a]ccept / [e]dit / [m]ore alternatives / [s]kip
+6. On save → moves to `approved`; `derived_from` kept as permanent audit trail
+7. Delete `taxonomy_working/` folder once all 22 categories are done
+
+**Ongoing:** Also runs automatically when `scrape_candidate_positions.py` hits an
+issue not yet in the taxonomy. The pipeline self-extends — no need to pre-seed every
+possible edge case before starting candidate scraping.
+
+---
+
+### B. `scrape_current_senate_campaigns.py` — weekly/daily race status checker
+
+**What it does:** Keeps the candidates table current on who is still in each
+2026 Senate race, the race stage (pre-primary / post-primary / general), and
+the next vote date. Runs weekly as a batch job.
+
+**How it works (already documented in the file):**
+1. Fetch all 2026 Senate filers from FEC → derive the set of states in play
+2. For each state, build the FEC candidate spine (authoritative names, no hallucinations)
+3. PASS A — Claude with open `web_search` tool: determine who is still in, stage, next vote
+4. PASS B — Claude with `web_search` restricted to trusted domains (ballotpedia.org,
+   state SoS, apnews.com, reuters.com, fec.gov): verify Pass A, return confidence score
+5. Write results back to DB — update `race_stage`, `race_status`, `primary_date`, `is_special`
+
+**Runtime prompts:** PROMPT_A (gather) and PROMPT_B (verify) are written verbatim in
+the file — copy them as string constants, do not paraphrase.
+
+**Flags to implement:** `--state GA` (single state), `--dry-run` (print, no DB writes)
+
+**Regression test:** Dan Osborn (NE), Troy Bodnar (MT), Marcus Pinkins (MS) must
+appear in output — these are the independents FEC may miss; if any disappear, the
+independent path has broken.
+
+**Do NOT bulk-scrape Ballotpedia** — only let the model access it via `web_search`.
+
+---
+
+### B. `scrape_candidate_positions.py` — HITL position extractor
+
+**What it does:** For each candidate with `needs_update=True`, fetches their
+campaign website and extracts stated positions mapped to our 22-category taxonomy.
+Pauses for human review before writing anything to the DB. Run manually — never
+automate this.
+
+**How it works (already documented in the file):**
+1. Claude `web_search` → find the correct Ballotpedia URL (name + state + "2026 Senate")
+2. Claude `web_fetch` the Ballotpedia page → extract the campaign website URL
+   - Fallback: `web_search` for "{name} {state} 2026 senate official website"
+3. Claude `web_fetch` the campaign website → extract stated positions
+   - Use `web_fetch` not httpx — most campaign sites are JS-rendered (React/Next.js);
+     httpx gets an empty shell; `web_fetch` renders the page
+   - Map only explicitly stated positions to the 22 categories — no inference
+   - Returns: `{positions: {...}, general_platform: "...", confidence: 0.0-1.0}`
+4. HITL review: print extracted positions → `[a]ccept / [s]kip / [e]dit`
+5. On accept: write `positions`, `general_platform`, `ballotpedia_url`, `website_url`
+   to DB; set `needs_update=False`
+
+**Model:** `claude-opus-4-8` — position extraction needs reasoning depth.
+
+**Flags to implement:** `--state GA`, `--name "Jon Ossoff" --state GA`, `--dry-run`
+
+**TODO (after main path works):** DuckDuckGo + alternative model (Llama/Gemini) as
+full fallback if Anthropic is unavailable. See fallback section in the file.
 
 ---
 
@@ -199,6 +288,210 @@ When you add resolutions back:
 - Tag them separately as "Symbolic" or "Procedural" in the UI so users understand a resolution vote is a visibility action, not a law being made
 - Surface them on senator record pages with clear labeling: "This was a non-binding resolution"
 - Use them to show the full picture of a senator's public positioning, not just their legislative record
+
+---
+
+## Phase 6 — Infrastructure, Scale & Deployment
+
+Everything below is post-product. Get the data pipeline and UI working first,
+then tackle this phase. These are decisions, not just tasks — each one has a
+right time to make it.
+
+---
+
+### Decide: Server vs. Serverless vs. Hybrid
+
+**Recommendation: Hybrid serverless.**
+
+| Component | Approach | Why |
+|---|---|---|
+| FastAPI API | Serverless (Lambda + Mangum, or Cloud Run) | Scales to zero, pay per request, no server to manage |
+| Database | Managed PostgreSQL (Supabase free tier → AWS RDS) | SQLite cannot be shared across serverless instances — must migrate |
+| Scheduled scrapers | Lambda on a schedule | Fits under 15-min limit per-state; or Cloud Run Jobs for no time limit |
+| HITL scrapers (positions, taxonomy) | Run locally → write to cloud DB | Developer tools, not production services |
+| Static assets | CloudFront CDN | Free at low scale, fast globally |
+
+**The one non-negotiable:** SQLite → PostgreSQL before any cloud deployment.
+SQLAlchemy already supports it — connection string change plus one driver swap.
+Supabase has a generous free tier and works as a drop-in managed PostgreSQL host.
+
+---
+
+### Security Hardening
+
+- **API key rotation** — move all keys (Anthropic, FEC, Congress.gov) to AWS Secrets
+  Manager. Never in environment variables on a deployed server.
+- **Rate limiting** — add per-user rate limits to the `/chat` endpoint before going
+  public. Without it, one user can exhaust your Anthropic API budget.
+- **Input validation** — the chat endpoint takes free-text user input sent to Claude.
+  Sanitize it and constrain Claude with a system prompt before deployment.
+- **HTTPS** — handled automatically by API Gateway (Lambda) or Cloud Run.
+- **Dependency audit** — run `pip audit` before deployment to catch known CVEs.
+
+---
+
+### Multiple Users + Auth
+
+The `users` table and basic user model already exist. What's missing:
+
+- **Authentication middleware** — JWT tokens or session cookies on every protected
+  endpoint. AWS Cognito is the path-of-least-resistance (free up to 50K monthly
+  active users). Alternatively Auth0 free tier.
+- **SSO** — Cognito supports Google OAuth, Apple Sign-In, and SAML out of the box.
+  Apple Sign-In is required for App Store submission if the app offers any other
+  third-party login.
+- **Per-user rate limiting** — Redis (AWS ElastiCache). Each user gets a token
+  bucket; the chat endpoint checks it before hitting Claude.
+
+---
+
+### Reliability — Target Uptime
+
+| SLA | Downtime/year | What it takes |
+|---|---|---|
+| 99.9% | 8.77 hours | Single-region, Multi-AZ RDS + Lambda. Reasonable v1 target. |
+| 99.99% | 52.6 minutes | Multi-AZ + CloudFront + Route 53 health checks. Achievable with standard AWS setup. |
+| 99.999% | 5.26 minutes | Active-passive multi-region failover. Significant but buildable. |
+| 99.9999% | 31.5 seconds | Active-active multi-region, chaos engineering, full observability stack. Ambitious — doable, but honest timeline is 6–18 months of dedicated infrastructure work after the product is stable. |
+
+**How AWS achieves high availability without much configuration:**
+- **Multi-AZ RDS** — automatic DB failover if a zone goes down; ~30 second failover.
+- **Lambda** — automatically spans multiple AZs; no configuration needed.
+- **CloudFront** — serves cached responses even if the API is briefly unavailable.
+- **Route 53 health checks** — reroutes traffic if an endpoint goes unhealthy.
+
+**Steps toward 99.9999% (six nines) when you're ready:**
+1. Multi-AZ RDS with read replicas (handles DB failures)
+2. Active-passive multi-region (us-east-1 primary, us-west-2 warm standby)
+3. Global Accelerator for DNS-level failover between regions
+4. Active-active multi-region with DynamoDB Global Tables (hardest — requires
+   rethinking the data layer entirely; DynamoDB not PostgreSQL)
+5. Chaos engineering — intentionally kill components and verify auto-recovery
+6. Full observability: CloudWatch alarms, X-Ray tracing, PagerDuty on-call
+7. SLA audit with a third-party uptime monitor
+
+Start at 99.9% and build toward it. Six nines is a valid goal — just not the
+first goal. Each additional nine is roughly 10x harder than the last.
+
+---
+
+### Scale Hardening — Handling Many Concurrent Users
+
+The chatbot is the bottleneck. Each `/chat` request calls Claude and can take
+5–30 seconds. Under load, this blocks everything.
+
+- **Redis queue (AWS ElastiCache)** — chat requests go into a queue, a worker
+  processes them, response is pushed back when ready. Users see a "thinking..."
+  state instead of a timeout. Standard pattern for AI apps under load.
+- **Cheaper model for chat** — Claude Haiku 4.5 ($1/M input, $5/M output) vs
+  Opus ($5/$25). For most conversational queries about senators and bills, Haiku
+  is sufficient. Reserve Opus for offline summarization tasks.
+- **Response caching** — common questions can be cached in Redis. Same question
+  from two users = one Claude call.
+- **Lambda auto-scaling** — happens automatically with no configuration. If you
+  use ECS/Fargate instead, set min=1, max=N and AWS handles the rest.
+
+---
+
+### AWS Migration Plan (do in order)
+
+Each step is independently deployable — don't do them all at once:
+
+1. **PostgreSQL migration** — provision Supabase (free) or RDS, run schema migration,
+   update connection string, test locally against cloud DB first.
+2. **Containerize** — add a `Dockerfile`, test locally with Docker.
+3. **Deploy API** — Lambda + Mangum (simplest) or Cloud Run (no time limits).
+   Set up API Gateway in front of Lambda.
+4. **Add Cognito auth** — wire up `/users` to Cognito tokens.
+5. **CloudFront** — CDN in front of the API.
+6. **ElastiCache Redis** — add when the chat queue becomes necessary.
+7. **Multi-AZ RDS** — enable when the DB becomes business-critical.
+8. **Multi-region** — when targeting 99.999%+.
+
+---
+
+### Scheduled Runtime Actions (still to set up)
+
+| Script | Cadence | Trigger |
+|---|---|---|
+| `scrape_current_senate_campaigns.py` | Weekly (daily during primary season) | Lambda + EventBridge schedule |
+| `seed_db.py` → `tag_bills.py` → `summarize_bills.py` → `describe_bills.py` | Weekly | Lambda + EventBridge schedule |
+| `seed_race_candidate_columns.py --fec` | Monthly | Lambda + EventBridge schedule |
+| `scrape_candidate_positions.py` | Manual HITL only | Run locally |
+| `build_policy_taxonomy.py` | Manual HITL only | Run locally |
+
+Ask Claude Code: *"Set up EventBridge schedules for the weekly data refresh
+pipeline and the campaign status scraper on AWS Lambda."*
+
+---
+
+### QA Testing & Load/DDoS Simulation
+
+**QA Testing:**
+- **Integration tests** — test every API endpoint against a real (test) database,
+  not mocks. Catches the class of bugs where the code works but the DB query doesn't.
+- **End-to-end tests** — simulate a real user session: create user → ask chat question
+  → verify senator record loads → verify candidate positions render correctly.
+  Playwright (the browser automation tool, not Anthropic's) is the standard tool.
+- **Data integrity tests** — after each seed run, verify row counts, check for nulls
+  in required fields, confirm no duplicate candidates or bills. Run these as a
+  post-seed assertion script, not just manual spot-checks.
+- **Regression tests** — the independent candidates (Dan Osborn NE, Troy Bodnar MT,
+  Marcus Pinkins MS) must always appear in campaign scraper output. These are already
+  noted in `scrape_current_senate_campaigns.py` as regression markers.
+
+**Load Testing & DDoS Simulation:**
+- **Locust** — open-source Python load testing tool. Define user behavior scripts
+  (hit `/chat`, browse senator records, load candidate pages) and simulate hundreds
+  of concurrent users. Tells you exactly where the app breaks under load before
+  real users find it.
+- **AWS WAF (Web Application Firewall)** — attach to API Gateway to block DDoS,
+  SQL injection, and known bot patterns automatically. Has a free tier for basic
+  rules; managed rule groups cost extra.
+- **AWS Shield Standard** — automatically included with API Gateway and CloudFront
+  at no extra cost. Protects against common network/transport layer DDoS attacks.
+- **AWS Shield Advanced** — paid ($3K/month), but includes 24/7 DDoS response team
+  and cost protection if a DDoS attack spikes your AWS bill. Consider when the app
+  has real traffic and political relevance (election season = higher target profile).
+- **Rate limiting simulation** — before launch, test what happens when a single IP
+  sends 1,000 requests/minute to `/chat`. Verify the rate limiter blocks it cleanly
+  without taking down the whole API.
+
+Ask Claude Code when ready: *"Set up Locust load tests for the core API endpoints
+and add AWS WAF rules to the API Gateway."*
+
+---
+
+### Code Hardening & Refactoring (before AWS migration)
+
+- **Alembic migrations** — replace raw `ALTER TABLE` with Alembic so schema
+  changes are tracked, versioned, and reversible. Required for production.
+- **Error handling** — currently most endpoints will 500 on unexpected input.
+  Add proper try/catch with meaningful HTTP status codes.
+- **Test coverage** — integration tests for `/chat` and senator record endpoints
+  at minimum before deployment.
+- **Structured logging** — JSON logs (not print statements) so AWS CloudWatch
+  can parse and alert on errors automatically.
+
+---
+
+### Apple App Store
+
+Three paths, in order of effort:
+
+1. **PWA (Progressive Web App)** — installable via Safari on iOS with no App Store
+   review, zero extra development. "Add to Home Screen" works today. Limited native
+   features but ships immediately. Good interim step.
+2. **React Native** — shares logic with the web frontend, native feel,
+   App Store approved. Requires a React Native developer or learning it.
+3. **Swift native** — best performance, most work. Only if iOS-first is the goal.
+
+Apple Sign-In is mandatory if the app offers any other third-party login.
+App Store review takes 1–7 days. The developer account ($99/year) takes time
+to activate — start it early.
+
+**Recommended path:** Make the web app a PWA first (hours of work), then
+build React Native once the product is stable.
 
 ---
 

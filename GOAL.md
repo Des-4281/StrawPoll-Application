@@ -39,3 +39,15 @@ in Congress even if we don't pull their voting history.
 
 It should also track net worth, how much money they have made over their term,
 graphed, and then spread out among what were the income sources including stocks.
+
+--- 
+
+On the homepage it should say something like "Your Vote Still Matters" or Find out Why Your vote matters? 
+
+Basically empowering people to beleive their vote still counts 
+
+Empowering people to believe thier vote still counts 
+
+Showing people thier vote still counts 
+
+Your Vote Still Counts / Your Vote Counts

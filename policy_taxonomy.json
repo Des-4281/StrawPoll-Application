@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "description": "Neutral policy position taxonomy. Approved entries are used by scrape_candidate_positions.py to map candidate stances to consistent, plain-English statements. Each position carries its own source URL and the raw text it was derived from for individual QA verification.",
+    "framing_rules": [
+      "Primary: 'is for X' — when the candidate has a stated positive position",
+      "Fallback: 'does not support X' — only when no positive alternative is stated on their site",
+      "Never use 'opposes' — adversarial framing, reads like an attack",
+      "6th grade reading level, Hemingway word economy — one concrete sentence per position",
+      "Describe the actual policy proposal, not the political tribe or the opponent",
+      "If a candidate is against amnesty but states no alternative, write 'does not support amnesty' not 'supports deportation'"
+    ],
+    "position_format": {
+      "statement":    "The neutral 'is for X' or 'does not support X' sentence",
+      "source":       "URL of the specific page this position was found on — required for QA",
+      "derived_from": "The raw text from that page the statement was synthesized from — audit trail"
+    },
+    "categories": [
+      "Healthcare", "Immigration", "Economy", "Climate/Energy", "Education",
+      "Criminal Justice", "Gun Policy", "Foreign Policy", "Social Issues",
+      "Veterans", "Housing", "Trade", "Infrastructure", "Technology",
+      "Voting Rights", "Labor", "Taxes", "Budget/Deficit", "Agriculture",
+      "Drug Policy", "LGBTQ Rights", "Reproductive Rights"
+    ],
+    "notes": "Healthcare is pre-seeded as a format reference with placeholder sources. Run 'python build_policy_taxonomy.py --issue Healthcare --refresh' to replace placeholders with real sourced entries. All other categories start as empty arrays — run build_policy_taxonomy.py to populate them one at a time."
+  },
+  "approved": {
+    "Healthcare": [
+      {
+        "statement": "is for Medicare for All — one government-run plan replacing private insurance",
+        "source": "SEED — run: python build_policy_taxonomy.py --issue Healthcare --refresh",
+        "derived_from": "SEED — no raw source yet"
+      },
+      {
+        "statement": "is for adding a public option alongside private insurance",
+        "source": "SEED — run: python build_policy_taxonomy.py --issue Healthcare --refresh",
+        "derived_from": "SEED — no raw source yet"
+      },
+      {
+        "statement": "is for keeping the current system with targeted reforms to lower costs",
+        "source": "SEED — run: python build_policy_taxonomy.py --issue Healthcare --refresh",
+        "derived_from": "SEED — no raw source yet"
+      },
+      {
+        "statement": "is for removing mandates and expanding private market competition",
+        "source": "SEED — run: python build_policy_taxonomy.py --issue Healthcare --refresh",
+        "derived_from": "SEED — no raw source yet"
+      },
+      {
+        "statement": "is for repealing the ACA and returning health decisions to states",
+        "source": "SEED — run: python build_policy_taxonomy.py --issue Healthcare --refresh",
+        "derived_from": "SEED — no raw source yet"
+      }
+    ],
+    "Immigration": [],
+    "Economy": [],
+    "Climate/Energy": [],
+    "Education": [],
+    "Criminal Justice": [],
+    "Gun Policy": [],
+    "Foreign Policy": [],
+    "Social Issues": [],
+    "Veterans": [],
+    "Housing": [],
+    "Trade": [],
+    "Infrastructure": [],
+    "Technology": [],
+    "Voting Rights": [],
+    "Labor": [],
+    "Taxes": [],
+    "Budget/Deficit": [],
+    "Agriculture": [],
+    "Drug Policy": [],
+    "LGBTQ Rights": [],
+    "Reproductive Rights": []
+  },
+  "_drafts": {}
+}

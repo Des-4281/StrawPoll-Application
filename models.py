@@ -232,6 +232,18 @@ class Candidate(Base):
     race_status: Mapped[str] = mapped_column(String(30), default="declared", nullable=False, index=True)
     race_status_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
+    # Where in the election cycle this race currently sits (updated by seed_race_candidates.py)
+    # "pre_primary" — primary hasn't happened yet
+    # "post_primary" — primary done, heading to general
+    # "mixed" — parties at different stages (e.g. Oklahoma runoff)
+    race_stage: Mapped[str | None] = mapped_column(String(20))
+    primary_date: Mapped[str | None] = mapped_column(String(10))  # e.g. "2026-08-18"
+    is_special: Mapped[bool] = mapped_column(default=False, nullable=False)
+
+    # Free-text summary of the candidate's overall platform (populated later via Claude)
+    # Separate from `positions` which maps to the structured 22-category taxonomy
+    general_platform: Mapped[str | None] = mapped_column(Text)
+
     # FEC candidate ID — e.g. "S8GA00180" — lets us re-query FEC for updates
     fec_candidate_id: Mapped[str | None] = mapped_column(String(20), index=True)
 

@@ -1,25 +1,51 @@
 """
-Seed 2026 Senate candidates using the FEC API, then extract their stated
-positions from their campaign websites using Claude.
+seed_candidates.py
 
-Why FEC as the data source:
+⚠️  FEC-SPECIFIC SCRIPT — POTENTIAL DEPRECATION CANDIDATE
+    This script uses the FEC API as its primary source of candidates.
+    The project has since moved to a JSON-first approach (seed_race_candidate_columns.py)
+    where a hand-curated or scraper-generated JSON file is the source of truth.
+    This script may be deprecated or repurposed once the new scraping pipeline
+    (scrape_current_senate_campaigns.py + scrape_candidate_positions.py) is complete.
+    Keep for now — it's still useful as a first-pass bulk import of FEC filers.
+
+What this script does:
+  Seeds 2026 Senate candidates using the FEC API, then attempts to extract their
+  stated positions from their campaign websites using Claude.
+
+Why FEC was chosen as the initial data source:
   - Official federal government source — every candidate who legally files is here
   - Free JSON API, no scraping, returns clean structured data
   - Has candidate name, state, party, incumbency status
-  - Committee records include the campaign website URL
-  - More reliable than any third-party aggregator
+  - Committee records include the campaign website URL (though unreliable — see below)
+
+Known limitations of the FEC approach:
+  - FEC website URLs come from committee filings and are often stale, all-caps, or wrong
+  - FEC's candidate_inactive flag is NOT a withdrawal signal — it's administrative and
+    is incorrectly set for many active candidates including sitting senators
+  - Only candidates who have filed with the FEC appear here — some late entrants,
+    independents, and write-ins may be missing until they file
+  - The ballotpedia_url field is CONSTRUCTED from the candidate name (not fetched or
+    verified) — many of these URLs may be wrong or point to the wrong person
 
 Why Claude for position extraction:
   - Campaign websites have wildly different layouts; Claude handles that naturally
   - We need positions mapped to our exact 22 categories — one Claude call does that
-  - Claude flags when a position is inferred vs. explicitly stated
   - Neutral framing: "supports X" / "opposes Y" — no spin, no value judgment
+  - NOTE: this script uses claude-sonnet-4-6 (cheaper, faster) not Opus —
+    position extraction here is a first-pass only, not the final authoritative source
+
+Website fetching limitations (why we're building a better scraper):
+  - Uses plain httpx fetch + regex HTML stripping
+  - Fails on JavaScript-heavy campaign sites (React, Next.js, etc.) which most are
+  - The new scrape_candidate_positions.py uses Claude's web_fetch tool instead,
+    which handles JS-rendered pages properly
 
 Data flow per candidate:
   1. FEC /candidates → name, state, party, incumbency
-  2. FEC /candidate/{id}/committees → campaign website URL
-  3. httpx fetch of campaign website
-  4. Claude: extract stated positions, map to 22 categories
+  2. FEC /candidate/{id}/committees → campaign website URL (unreliable)
+  3. httpx plain fetch of campaign website (fails on JS sites)
+  4. Claude Sonnet: extract stated positions, map to 22 categories
   5. Save to candidates table
 
 Rate limits:

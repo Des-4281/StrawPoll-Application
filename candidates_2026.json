@@ -1,0 +1,405 @@
+[
+  {
+    "state": "AL",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Barry Moore",  "party": "Republican Party", "incumbent": false },
+      { "name": "Everett Wess", "party": "Democratic Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "AK",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-08-18",
+    "is_special": false,
+    "candidates": [
+      { "name": "Dan Sullivan",    "party": "Republican Party", "incumbent": true },
+      { "name": "Mary Peltola",    "party": "Democratic Party", "incumbent": false },
+      { "name": "Ann Diener",      "party": "Democratic Party", "incumbent": false },
+      { "name": "Richard Grayson", "party": "Green Party",      "incumbent": false }
+    ]
+  },
+  {
+    "state": "AR",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Tom Cotton",      "party": "Republican Party",  "incumbent": true },
+      { "name": "Hallie Shoffner", "party": "Democratic Party",  "incumbent": false },
+      { "name": "Jeff Wadlin",     "party": "Libertarian Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "CO",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-06-30",
+    "is_special": false,
+    "candidates": [
+      { "name": "John Hickenlooper", "party": "Democratic Party", "incumbent": true },
+      { "name": "Julie Gonzales",    "party": "Democratic Party", "incumbent": false },
+      { "name": "Mark Baisley",      "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "DE",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-09-15",
+    "is_special": false,
+    "candidates": [
+      { "name": "Chris Coons",           "party": "Democratic Party", "incumbent": true },
+      { "name": "Christopher Beardsley", "party": "Democratic Party", "incumbent": false },
+      { "name": "Michael Katz",          "party": "Republican Party", "incumbent": false },
+      { "name": "John Shulli",           "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "FL",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-08-18",
+    "is_special": true,
+    "candidates": [
+      { "name": "Ashley Moody",      "party": "Republican Party", "incumbent": true },
+      { "name": "Alexander Vindman", "party": "Democratic Party", "incumbent": false },
+      { "name": "Angie Nixon",       "party": "Democratic Party", "incumbent": false },
+      { "name": "Neil Gillespie",    "party": "Independent",      "incumbent": false }
+    ]
+  },
+  {
+    "state": "GA",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Jon Ossoff",    "party": "Democratic Party",  "incumbent": true },
+      { "name": "Mike Collins",  "party": "Republican Party",  "incumbent": false },
+      { "name": "Allen Buckley", "party": "Libertarian Party", "incumbent": false },
+      { "name": "Al Bartell",    "party": "Independent",       "incumbent": false }
+    ]
+  },
+  {
+    "state": "ID",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Jim Risch",       "party": "Republican Party",  "incumbent": true },
+      { "name": "Todd Achilles",   "party": "Independent",       "incumbent": false },
+      { "name": "Natalie Fleming", "party": "Independent",       "incumbent": false },
+      { "name": "Matt Loesby",     "party": "Libertarian Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "IL",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Juliana Stratton", "party": "Democratic Party", "incumbent": false },
+      { "name": "Don Tracy",        "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "IA",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Ashley Hinson", "party": "Republican Party",  "incumbent": false },
+      { "name": "Josh Turek",    "party": "Democratic Party",  "incumbent": false },
+      { "name": "Thomas Laehn", "party": "Libertarian Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "KS",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-08-04",
+    "is_special": false,
+    "candidates": [
+      { "name": "Roger Marshall",       "party": "Republican Party", "incumbent": true },
+      { "name": "Christy Davis",        "party": "Democratic Party", "incumbent": false },
+      { "name": "Jason Hart",           "party": "Democratic Party", "incumbent": false },
+      { "name": "Erik Murray",          "party": "Democratic Party", "incumbent": false },
+      { "name": "Anne Parelkar",        "party": "Democratic Party", "incumbent": false },
+      { "name": "Patrick Schmidt",      "party": "Democratic Party", "incumbent": false },
+      { "name": "Mike Soetaert",        "party": "Democratic Party", "incumbent": false },
+      { "name": "Sandy Spidel Neumann", "party": "Democratic Party", "incumbent": false },
+      { "name": "Noah Tyler",           "party": "Democratic Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "KY",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Andy Barr",      "party": "Republican Party", "incumbent": false },
+      { "name": "Charles Booker", "party": "Democratic Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "LA",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Julia Letlow", "party": "Republican Party", "incumbent": false },
+      { "name": "Jamie Davis",  "party": "Democratic Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "ME",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Susan Collins",  "party": "Republican Party", "incumbent": true },
+      { "name": "Graham Platner", "party": "Democratic Party", "incumbent": false },
+      { "name": "Tim Rich",       "party": "Independent",      "incumbent": false }
+    ]
+  },
+  {
+    "state": "MA",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-09-01",
+    "is_special": false,
+    "candidates": [
+      { "name": "Ed Markey",    "party": "Democratic Party", "incumbent": true },
+      { "name": "Seth Moulton", "party": "Democratic Party", "incumbent": false },
+      { "name": "Alex Rikleen", "party": "Democratic Party", "incumbent": false },
+      { "name": "John Deaton",  "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "MI",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-08-04",
+    "is_special": false,
+    "candidates": [
+      { "name": "Mallory McMorrow", "party": "Democratic Party", "incumbent": false },
+      { "name": "Abdul El-Sayed",   "party": "Democratic Party", "incumbent": false },
+      { "name": "Haley Stevens",    "party": "Democratic Party", "incumbent": false },
+      { "name": "Rachel Howard",    "party": "Democratic Party", "incumbent": false },
+      { "name": "Mike Rogers",      "party": "Republican Party", "incumbent": false },
+      { "name": "Bernadette Smith", "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "MN",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-08-11",
+    "is_special": false,
+    "candidates": [
+      { "name": "Peggy Flanagan",  "party": "Democratic Party", "incumbent": false },
+      { "name": "Angie Craig",     "party": "Democratic Party", "incumbent": false },
+      { "name": "Michele Tafoya",  "party": "Republican Party", "incumbent": false },
+      { "name": "Royce White",     "party": "Republican Party", "incumbent": false },
+      { "name": "Tom Weiler",      "party": "Republican Party", "incumbent": false },
+      { "name": "Adam Schwarze",   "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "MS",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Cindy Hyde-Smith", "party": "Republican Party", "incumbent": true },
+      { "name": "Scott Colom",      "party": "Democratic Party", "incumbent": false },
+      { "name": "Ty Pinkins",       "party": "Independent",      "incumbent": false }
+    ]
+  },
+  {
+    "state": "MT",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Kurt Alme",    "party": "Republican Party",  "incumbent": false },
+      { "name": "Reilly Neill", "party": "Democratic Party",  "incumbent": false },
+      { "name": "Seth Bodnar",  "party": "Independent",       "incumbent": false },
+      { "name": "Kyle Austin",  "party": "Libertarian Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "NE",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Pete Ricketts", "party": "Republican Party", "incumbent": true },
+      { "name": "Dan Osborn",    "party": "Independent",      "incumbent": false }
+    ]
+  },
+  {
+    "state": "NH",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-09-08",
+    "is_special": false,
+    "candidates": [
+      { "name": "Chris Pappas",    "party": "Democratic Party", "incumbent": false },
+      { "name": "Karishma Manzur", "party": "Democratic Party", "incumbent": false },
+      { "name": "Jared Sullivan",  "party": "Democratic Party", "incumbent": false },
+      { "name": "John E. Sununu",  "party": "Republican Party", "incumbent": false },
+      { "name": "Scott Brown",     "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "NJ",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Cory Booker",   "party": "Democratic Party", "incumbent": true },
+      { "name": "Justin Murphy", "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "NM",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Ben Ray Luján", "party": "Democratic Party", "incumbent": true },
+      { "name": "Larry Marker",  "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "NC",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Roy Cooper",      "party": "Democratic Party",  "incumbent": false },
+      { "name": "Michael Whatley", "party": "Republican Party",  "incumbent": false },
+      { "name": "Shannon Bray",    "party": "Libertarian Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "OH",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": true,
+    "candidates": [
+      { "name": "Jon Husted",      "party": "Republican Party",  "incumbent": true },
+      { "name": "Sherrod Brown",   "party": "Democratic Party",  "incumbent": false },
+      { "name": "William Redpath", "party": "Libertarian Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "OK",
+    "race_stage": "mixed",
+    "primary_date": "2026-08-25",
+    "is_special": false,
+    "candidates": [
+      { "name": "Kevin Hern",      "party": "Republican Party",  "incumbent": false },
+      { "name": "N'Kiyla Thomas",  "party": "Democratic Party",  "incumbent": false },
+      { "name": "Jim Priest",      "party": "Democratic Party",  "incumbent": false },
+      { "name": "Ron Meinhardt",   "party": "Independent",       "incumbent": false },
+      { "name": "Curtis Stinnett", "party": "Independent",       "incumbent": false },
+      { "name": "Sevier White",    "party": "Libertarian Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "OR",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Jeff Merkley",      "party": "Democratic Party", "incumbent": true },
+      { "name": "David Brock Smith", "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "RI",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-09-08",
+    "is_special": false,
+    "candidates": [
+      { "name": "Jack Reed",        "party": "Democratic Party", "incumbent": true },
+      { "name": "Connor Burbridge", "party": "Democratic Party", "incumbent": false },
+      { "name": "Raymond McKay",    "party": "Republican Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "SC",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Lindsey Graham",  "party": "Republican Party",   "incumbent": true },
+      { "name": "Annie Andrews",   "party": "Democratic Party",   "incumbent": false },
+      { "name": "Kasie Whitener",  "party": "Libertarian Party",  "incumbent": false },
+      { "name": "Jason Brenkus",   "party": "Libertarian Party",  "incumbent": false },
+      { "name": "Mark Hackett",    "party": "Constitution Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "SD",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Mike Rounds",     "party": "Republican Party", "incumbent": true },
+      { "name": "Julian Beaudion", "party": "Democratic Party", "incumbent": false },
+      { "name": "Brian Bengs",     "party": "Independent",      "incumbent": false }
+    ]
+  },
+  {
+    "state": "TN",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-08-06",
+    "is_special": false,
+    "candidates": [
+      { "name": "Bill Hagerty",      "party": "Republican Party", "incumbent": true },
+      { "name": "Marquita Bradshaw", "party": "Democratic Party", "incumbent": false },
+      { "name": "Maria Brewer",      "party": "Democratic Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "TX",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Ken Paxton",     "party": "Republican Party",  "incumbent": false },
+      { "name": "James Talarico", "party": "Democratic Party",  "incumbent": false },
+      { "name": "Ted Brown",      "party": "Libertarian Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "VA",
+    "race_stage": "pre_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Mark Warner",    "party": "Democratic Party", "incumbent": true },
+      { "name": "Bert Mizusawa", "party": "Republican Party", "incumbent": false },
+      { "name": "Kim Farrington", "party": "Republican Party", "incumbent": false },
+      { "name": "Mark Moran",     "party": "Independent",      "incumbent": false }
+    ]
+  },
+  {
+    "state": "WV",
+    "race_stage": "post_primary",
+    "primary_date": null,
+    "is_special": false,
+    "candidates": [
+      { "name": "Shelley Moore Capito", "party": "Republican Party", "incumbent": true },
+      { "name": "Rachel Anderson",      "party": "Democratic Party", "incumbent": false }
+    ]
+  },
+  {
+    "state": "WY",
+    "race_stage": "pre_primary",
+    "primary_date": "2026-08-18",
+    "is_special": false,
+    "candidates": [
+      { "name": "Harriet Hageman", "party": "Republican Party", "incumbent": false },
+      { "name": "Sam Mead",        "party": "Republican Party", "incumbent": false },
+      { "name": "James Byrd",      "party": "Democratic Party", "incumbent": false }
+    ]
+  }
+]
