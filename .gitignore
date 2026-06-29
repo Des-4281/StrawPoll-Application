@@ -21,3 +21,6 @@ build/
 
 # macOS
 .DS_Store
+
+# Local archives and scratch files — not part of the codebase
+describe_bills_archive_v1.md

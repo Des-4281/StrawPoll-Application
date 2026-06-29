@@ -13,7 +13,7 @@ from sqlalchemy import select
 from dotenv import load_dotenv
 
 from database import get_db, init_db
-from models import User, UserFavorite, ChatSession, FavoriteType
+from models import User, UserFavorite, ChatSession, FavoriteType, Politician, Bill, Vote
 from ai_tools import TOOL_DEFINITIONS, execute_tool
 
 
@@ -229,3 +229,51 @@ async def get_favorites(user_id: int, db: AsyncSession = Depends(get_db)):
         }
         for f in favorites
     ]
+
+@app.get("/senator/{bioguide_id}/record")
+async def senator_record(bioguide_id: str, db: AsyncSession = Depends(get_db)):
+    senator = await db.get(Politician, bioguide_id)
+    if not senator:
+        raise HTTPException(status_code=404, detail="Senator not found")
+
+    result = await db.execute(
+        select(Vote, Bill)
+        .join(Bill, Vote.bill_number == Bill.bill_number)
+        .where(Vote.bioguide_id == bioguide_id)
+        .where(Bill.bill_type != "Procedural")
+    )
+    rows = result.all()
+
+    record = {}
+    for vote, bill in rows:
+        for tag in (bill.tags or []):
+            if tag not in record:
+                record[tag] = {"yea": 0, "nay": 0, "present": 0, "votes": []}
+            
+            position = vote.position.lower()
+            if position == "yea":
+                record[tag]["yea"] += 1
+            elif position == "nay":
+                record[tag]["nay"] += 1
+            else:
+                record[tag]["present"] += 1
+            
+            record[tag]["votes"].append({
+                "bill_number": bill.bill_number,
+                "title": bill.title,
+                "position": vote.position,
+                "status": bill.status,
+                "bill_description": bill.bill_description,
+                "yea_impact": bill.yea_impact,
+                "tags": bill.tags,
+            })
+
+    return {
+        "senator": {
+            "bioguide_id": senator.bioguide_id,
+            "name": senator.name,
+            "party": senator.party,
+            "state": senator.state,
+        },
+        "record": record,
+    }
